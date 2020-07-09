@@ -13,6 +13,10 @@ export class FoldingHandler {
   documentMode: any;
   originalNoForeignObject: any; // Editor.prototype.originalNoForeignObject
 
+  title: any;
+  content: any;
+  funct: any;
+
   constructor(sidebar: Sidebar) {
     this.sidebar = sidebar;
     const {
@@ -33,8 +37,36 @@ export class FoldingHandler {
    * Create the given title element.
    */
   add(title, content, funct) {
-    var initialized = false;
+    this.set(title, content, funct);
+    this.setTitle(title);
+    this.addClickHandler();
+    this.preventFocus();
+  }
 
+  preventFocus() {
+    const { title } = this;
+    // Prevents focus
+    if (!mxClient.IS_QUIRKS) {
+      mxEvent.addListener(
+        title,
+        mxClient.IS_POINTER ? "pointerdown" : "mousedown",
+        (evt) => {
+          evt.preventDefault();
+        }
+      );
+    }
+  }
+
+  set(title, content, funct) {
+    this.title = title;
+    this.content = content;
+    this.funct = funct;
+    return this;
+  }
+
+  setTitle(title?) {
+    title = title || this.title;
+    const { content } = this;
     // Avoids mixed content warning in IE6-8
     if (!mxClient.IS_IE || this.documentMode >= 8) {
       title.style.backgroundImage =
@@ -45,7 +77,11 @@ export class FoldingHandler {
 
     title.style.backgroundRepeat = "no-repeat";
     title.style.backgroundPosition = "0% 50%";
+  }
 
+  addClickHandler() {
+    const { title, content, funct } = this;
+    var initialized = false;
     mxEvent.addListener(title, "click", (evt) => {
       if (content.style.display == "none") {
         if (!initialized) {
@@ -85,16 +121,5 @@ export class FoldingHandler {
 
       mxEvent.consume(evt);
     });
-
-    // Prevents focus
-    if (!mxClient.IS_QUIRKS) {
-      mxEvent.addListener(
-        title,
-        mxClient.IS_POINTER ? "pointerdown" : "mousedown",
-        (evt) => {
-          evt.preventDefault();
-        }
-      );
-    }
   }
 }

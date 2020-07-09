@@ -6,6 +6,13 @@ export class ClickHandler {
   dragElement: any;
   currentGraph: any;
 
+  element: any;
+  dragSource: any;
+  cells: any;
+
+  first: any;
+  sb: any;
+
   constructor(editorUi, dragElement) {
     this.editorUi = editorUi;
     this.currentGraph = editorUi.graph;
@@ -15,25 +22,58 @@ export class ClickHandler {
   /**
    * AddragSource a handler for inserting the cell with a single click.
    */
+  set(element, dragSource, cells) {
+    this.element = element;
+    this.dragSource = dragSource;
+    this.cells = cells;
+    return this;
+  }
+
+  get graph() {
+    return this.editorUi.editor.graph;
+  }
+
+  get mouseDown() {
+    return this.dragSource.mouseDown;
+  }
+
+  get mouseMove() {
+    return this.dragSource.mouseMove;
+  }
+
+  get mouseUp() {
+    return this.dragSource.mouseUp;
+  }
+
+  get tol() {
+    return this.graph.tolerance;
+  }
+
   add(element, dragSource, cells) {
-    var graph = this.editorUi.editor.graph;
-    var oldMouseDown = dragSource.mouseDown;
-    var oldMouseMove = dragSource.mouseMove;
-    var oldMouseUp = dragSource.mouseUp;
-    var tol = graph.tolerance;
-    var first: any;
-    var sb: any;
+    const { set, setDragMouseDown, setDragMouseMove, setDragMouseUp } = this;
+    set(element, dragSource, cells);
+    setDragMouseDown();
+    setDragMouseMove();
+    setDragMouseUp();
+  }
 
-    dragSource.mouseDown = function (evt) {
-      oldMouseDown.apply(this, arguments);
-      first = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+  setDragMouseDown() {
+    const { mouseDown, dragElement, dragSource, element } = this;
+    dragSource.mouseDown = (evt) => {
+      mouseDown.apply(this, arguments);
+      this.first = new mxPoint(
+        mxEvent.getClientX(evt),
+        mxEvent.getClientY(evt)
+      );
 
-      if (this.dragElement != null) {
-        this.dragElement.style.display = "none";
-        mxUtils.setOpacity(element, 50);
-      }
+      if (!dragElement) return;
+      dragElement.style.display = "none";
+      mxUtils.setOpacity(element, 50);
     };
+  }
 
+  setDragMouseMove() {
+    const { first, mouseMove, dragSource, element, tol } = this;
     dragSource.mouseMove = (evt) => {
       if (
         this.dragElement != null &&
@@ -46,9 +86,12 @@ export class ClickHandler {
         mxUtils.setOpacity(element, 100);
       }
 
-      oldMouseMove.apply(this, arguments);
+      mouseMove.apply(this, arguments);
     };
+  }
 
+  setDragMouseUp() {
+    const { mouseUp, dragSource, element, cells, sb } = this;
     dragSource.mouseUp = (evt) => {
       try {
         if (
@@ -60,9 +103,9 @@ export class ClickHandler {
           sb.itemClicked(cells, dragSource, evt, element);
         }
 
-        oldMouseUp.apply(dragSource, arguments);
+        mouseUp.apply(dragSource, arguments);
         mxUtils.setOpacity(element, 100);
-        first = null;
+        this.first = null;
 
         // Blocks tooltips on this element after single click
         sb.currentElt = element;

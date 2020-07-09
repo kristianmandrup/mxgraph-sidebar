@@ -20,7 +20,7 @@ describe("SidebarInitializer", () => {
     });
 
     describe("methods", () => {
-      describe("#add", () => {
+      describe("add(element, dragSource, cells)", () => {
         const element = document.createElement("x");
         const dragSource: any = {};
         const cells = [];
@@ -38,6 +38,21 @@ describe("SidebarInitializer", () => {
           test("has mouseDown handler", () => {
             expect(dragSource.mouseUp).toBeDefined();
           });
+        });
+      });
+      describe("setDragMouseDown()", () => {
+        test("no throw", () => {
+          expect(() => clickHandler.setDragMouseDown()).not.toThrow();
+        });
+      });
+      describe("setDragMouseMove()", () => {
+        test("no throw", () => {
+          expect(() => clickHandler.setDragMouseMove()).not.toThrow();
+        });
+      });
+      describe("setDragMouseUp()", () => {
+        test("no throw", () => {
+          expect(() => clickHandler.setDragMouseUp()).not.toThrow();
         });
       });
     });
