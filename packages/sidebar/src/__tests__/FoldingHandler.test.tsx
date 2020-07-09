@@ -52,6 +52,14 @@ describe("ImagePaletteAdder", () => {
           expect(handler.add(title, content, funct)).not.toThrow();
         });
       });
+
+      // preventFocus()
+      // set(title, content, funct)
+      // setTitle(title?)
+      // addClickHandler()
+      // clickListener(evt)
+      // contentDisplay()
+      // contentHidden()
     });
   });
 });
