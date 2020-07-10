@@ -89,11 +89,15 @@ export class Tooltip {
   }
 
   show(element, opts: any = {}) {
-    new TooltipDisplayer(this.editorUi, this.tooltip, {
+    this.createTooltipDisplayer(element, opts).show();
+  }
+
+  createTooltipDisplayer(element, opts) {
+    return new TooltipDisplayer(this.editorUi, this.tooltip, {
       element,
       classMap: this.classMap,
       ...opts,
-    }).show();
+    });
   }
 
   resetTooltip() {

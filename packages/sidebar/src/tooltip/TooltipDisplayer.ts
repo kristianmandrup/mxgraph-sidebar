@@ -40,12 +40,17 @@ export class TooltipDisplayer {
     return new this.classMap.Graph(tooltip, null, null, graph.getStylesheet());
   }
 
-  createTooltipAndGraph() {
+  createTooltip() {
     const { tooltip } = this;
     this.tooltip = document.createElement("div");
     tooltip.className = "geSidebarTooltip";
     tooltip.style.zIndex = mxPopupMenu.prototype.zIndex - 1;
     tooltip.style.display = "block";
+    return tooltip;
+  }
+
+  appendTooltip() {
+    const tooltip = this.createTooltip();
     document.body.appendChild(tooltip);
   }
 
@@ -55,6 +60,11 @@ export class TooltipDisplayer {
     graph = this.configureGraph();
     this.graph2 = graph;
     return graph;
+  }
+
+  createTooltipAndGraph() {
+    this.appendTooltip();
+    this.createGraph();
   }
 
   configureGraph() {
@@ -137,12 +147,15 @@ export class TooltipDisplayer {
   }
 
   setTooltipTitle() {
-    const { appendAndStyleTooltipTitle, hideTooltipTitle } = this;
+    const {
+      setAndStyleTooltipTitle: appendAndStyleTooltipTitle,
+      hideTooltipTitle,
+    } = this;
     // Adds title for entry
     appendAndStyleTooltipTitle() || hideTooltipTitle();
   }
 
-  appendAndStyleTooltipTitle() {
+  setAndStyleTooltipTitle() {
     if (!this.shouldCreateTooltipTitleElem) return;
     const {
       appendNewTooltipTitleElem,
