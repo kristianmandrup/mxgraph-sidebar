@@ -1,5 +1,5 @@
-import { editorUi, graph } from "./mocks";
-import { Sidebar } from "../Sidebar";
+import { editorUi, graph } from "../mocks";
+import { Sidebar } from "../../side";
 
 describe("SidebarPaletteSetup", () => {
   const container = document.createElement("x");

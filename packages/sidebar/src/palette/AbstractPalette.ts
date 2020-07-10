@@ -1,5 +1,5 @@
 import { AbstractShaper } from "../shapes/AbstractShaper";
-import { Sidebar } from "../Sidebar";
+import { Sidebar } from "../side";
 
 export class AbstractPalette extends AbstractShaper {
   addDataEntry: any;

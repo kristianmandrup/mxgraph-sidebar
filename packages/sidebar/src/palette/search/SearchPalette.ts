@@ -2,7 +2,7 @@ import mx from "@mxgraph-app/mx";
 import { AbstractPalette } from "../AbstractPalette";
 import { EventListeners } from "./EventListeners";
 import { Finder } from "./Finder";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxUtils, mxClient, mxResources } = mx;
 
 export class SearchPalette extends AbstractPalette {

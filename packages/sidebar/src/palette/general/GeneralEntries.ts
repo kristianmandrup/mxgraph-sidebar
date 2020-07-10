@@ -1,6 +1,6 @@
 import { GeneralPalette } from "./GeneralPalette";
 import mx from "@mxgraph-app/mx";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxGeometry, mxCell, mxPoint } = mx;
 
 export class GeneralEntries extends GeneralPalette {

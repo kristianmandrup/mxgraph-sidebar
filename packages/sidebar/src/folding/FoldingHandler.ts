@@ -1,13 +1,7 @@
 import mx from "@mxgraph-app/mx";
-import { Sidebar } from "./Sidebar";
 const { mxClient, mxEvent, mxResources } = mx;
 
 export class FoldingHandler {
-  sidebar: Sidebar;
-  editorUi: any;
-  graph: any;
-  showTooltips = true;
-
   collapsedImage: any;
   expandedImage: any;
   documentMode: any;
@@ -19,28 +13,25 @@ export class FoldingHandler {
   initialized: boolean = false;
   prev: any;
 
-  constructor(sidebar: Sidebar) {
-    this.sidebar = sidebar;
-    const {
-      editorUi,
-      graph,
-      collapsedImage,
-      expandedImage,
-      documentMode,
-    } = sidebar;
-    this.editorUi = editorUi;
-    this.graph = graph;
+  /**
+   * Create the given title element.
+   */
+  constructor({
+    title,
+    content,
+    funct,
+    collapsedImage,
+    expandedImage,
+    documentMode,
+  }: any = {}) {
+    this.set(title, content, funct);
     this.collapsedImage = collapsedImage;
     this.expandedImage = expandedImage;
     this.documentMode = documentMode;
   }
 
-  /**
-   * Create the given title element.
-   */
-  add(title, content, funct) {
-    this.set(title, content, funct);
-    this.setTitle(title);
+  configure() {
+    this.configureTitleElement();
     this.addClickHandler();
     this.preventFocus();
   }
@@ -66,20 +57,34 @@ export class FoldingHandler {
     return this;
   }
 
-  setTitle(title?) {
-    title = title || this.title;
-    const { content } = this;
-    // Avoids mixed content warning in IE6-8
-    if (!mxClient.IS_IE || this.documentMode >= 8) {
-      title.style.backgroundImage =
-        content.style.display == "none"
-          ? "url('" + this.collapsedImage + "')"
-          : "url('" + this.expandedImage + "')";
-    }
+  configureTitleElement() {
+    this.ie8QuirkFix();
+    this.configureTitleStyle();
+  }
 
+  configureTitleStyle() {
+    const { title } = this;
     title.style.backgroundRepeat = "no-repeat";
     title.style.backgroundPosition = "0% 50%";
-    return title;
+  }
+
+  get isIE8() {
+    return !mxClient.IS_IE || this.documentMode >= 8;
+  }
+
+  // Avoids mixed content warning in IE6-8
+  ie8QuirkFix() {
+    const { isIE8 } = this;
+    if (!isIE8) return;
+    const { title, content } = this;
+    title.style.backgroundImage =
+      content.style.display == "none"
+        ? "url('" + this.collapsedImage + "')"
+        : "url('" + this.expandedImage + "')";
+  }
+
+  get isVisible() {
+    return this.content.style.display !== "none";
   }
 
   addClickHandler() {
@@ -100,12 +105,15 @@ export class FoldingHandler {
   };
 
   contentHidden = () => {
-    const { title, content, initialize, doDefault } = this;
-    if (content.style.display != "none") return;
-    initialize() || doDefault();
-    title.style.backgroundImage = "url('" + this.expandedImage + "')";
+    const { setTitleBackgroundImage, isVisible, initialize, doDefault } = this;
+    isVisible ? initialize() : doDefault();
+    setTitleBackgroundImage();
     return true;
   };
+
+  setTitleBackgroundImage() {
+    this.title.style.backgroundImage = "url('" + this.expandedImage + "')";
+  }
 
   doDefault = () => {
     this.content.style.display = "block";
@@ -120,12 +128,12 @@ export class FoldingHandler {
   };
 
   doInitialize = () => {
-    const { ensureWaitCursorMac, setWindowTimeout } = this;
-    ensureWaitCursorMac();
+    const { waitCursorMac, setWindowTimeout } = this;
+    waitCursorMac();
     setWindowTimeout();
   };
 
-  ensureWaitCursorMac() {
+  waitCursorMac() {
     const { title } = this;
     // Wait cursor does not show up on Mac
     title.style.cursor = "wait";

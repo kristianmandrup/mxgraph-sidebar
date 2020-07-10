@@ -1,5 +1,5 @@
 import { AbstractPalette } from "../AbstractPalette";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 
 export class ImagePalette extends AbstractPalette {
   defaultImageWidth: any;

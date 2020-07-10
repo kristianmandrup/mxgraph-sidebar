@@ -1,5 +1,5 @@
 import { GeneralPalette } from "./GeneralPalette";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 
 export class GeneralTemplateEntries extends GeneralPalette {
   constructor(sidebar: Sidebar) {

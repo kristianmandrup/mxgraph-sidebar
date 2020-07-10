@@ -1,5 +1,5 @@
-import { ClickHandler } from "..";
-import { editorUi } from "./mocks";
+import { ClickHandler } from "../..";
+import { editorUi } from "../mocks";
 
 describe("SidebarInitializer", () => {
   const ui = editorUi;

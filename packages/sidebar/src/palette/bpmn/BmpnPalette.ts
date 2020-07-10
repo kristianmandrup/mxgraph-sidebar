@@ -2,7 +2,7 @@ import mx from "@mxgraph-app/mx";
 import { AbstractPalette } from "../AbstractPalette";
 import { BpmnEntries } from "./BpmnEntries";
 import { BpmnTemplateEntries } from "./BpmnTemplateEntries";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxResources } = mx;
 
 export class BpmnPalette extends AbstractPalette {

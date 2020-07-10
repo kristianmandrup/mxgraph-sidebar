@@ -1,7 +1,7 @@
-import { SidebarInitializer } from "..";
+import { SidebarInitializer } from "../..";
 
-import { editorUi } from "./mocks";
-import { Sidebar } from "../Sidebar";
+import { editorUi } from "../mocks";
+import { Sidebar } from "../../side";
 
 describe("SidebarInitializer", () => {
   const ui = editorUi;

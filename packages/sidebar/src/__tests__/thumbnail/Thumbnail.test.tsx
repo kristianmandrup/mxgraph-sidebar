@@ -1,5 +1,5 @@
-import { Thumbnail } from "..";
-import { editorUi } from "./mocks";
+import { Thumbnail } from "../..";
+import { editorUi } from "../mocks";
 
 describe("SidebarEntries", () => {
   const ui = editorUi;

@@ -1,5 +1,5 @@
 import mx from "@mxgraph-app/mx";
-import { SidebarEntries } from "../SidebarEntries";
+import { SidebarEntries } from "../";
 // import { Graph } from "@mxgraph-app/graph";
 const { mxPoint, mxGraphModel, mxCodec, mxUtils, mxCell, mxGeometry } = mx;
 

@@ -1,5 +1,5 @@
 import resources from "@mxgraph-app/resources";
-import { Palettes } from "./palette";
+import { Palettes } from "../palette";
 const { urlParams } = resources;
 
 export class SidebarPaletteSetup {

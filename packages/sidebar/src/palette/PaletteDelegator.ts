@@ -1,4 +1,4 @@
-import { Sidebar } from "../Sidebar";
+import { Sidebar } from "../side";
 
 export abstract class PaletteDelegator {
   sidebar: Sidebar;

@@ -1,6 +1,6 @@
 import { AbstractPalette } from "../AbstractPalette";
 import mx from "@mxgraph-app/mx";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxCell, mxGeometry, mxPoint } = mx;
 
 export class BpmnEntries extends AbstractPalette {

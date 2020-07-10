@@ -1,7 +1,7 @@
-import { ImagePaletteAdder } from "..";
-import { editorUi } from "./mocks";
-import { Palettes } from "../palette";
-import { Sidebar } from "../Sidebar";
+import { ImagePaletteAdder } from "../..";
+import { editorUi } from "../mocks";
+import { Palettes } from "../../palette";
+import { Sidebar } from "../../side";
 
 describe("ImagePaletteAdder", () => {
   const container = document.createElement("a");

@@ -1,6 +1,6 @@
-import { FoldingHandler } from "..";
-import { editorUi } from "./mocks";
-import { Sidebar } from "../Sidebar";
+import { FoldingHandler } from "../..";
+import { editorUi } from "../mocks";
+import { Sidebar } from "../../side";
 
 describe("ImagePaletteAdder", () => {
   const ui = editorUi;

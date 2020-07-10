@@ -1,7 +1,7 @@
 import mx from "@mxgraph-app/mx";
 const { mxClient } = mx;
 import { PaletteDelegator } from "../PaletteDelegator";
-import { PaletteFoldingHandler } from "./PaletteFoldingHandler";
+import { FoldingHandler } from "../../folding";
 
 type TOnInit = (content, title?) => void;
 
@@ -86,6 +86,6 @@ export class PaletteAdder extends PaletteDelegator {
    * Create the given title element.
    */
   addFoldingHandler(title, content, funct) {
-    new PaletteFoldingHandler(this, { title, content, funct }).add();
+    new FoldingHandler({ title, content, funct }).configure();
   }
 }

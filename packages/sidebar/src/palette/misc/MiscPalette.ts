@@ -2,7 +2,7 @@ import { AbstractPalette } from "../AbstractPalette";
 import mx from "@mxgraph-app/mx";
 import { MiscTemplateEntries } from "./MiscTemplateEntries";
 import { MiscEntries } from "./MiscEntries";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxResources } = mx;
 
 export class MiscPalette extends AbstractPalette {

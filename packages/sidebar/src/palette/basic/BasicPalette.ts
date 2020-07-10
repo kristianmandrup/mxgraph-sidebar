@@ -1,6 +1,6 @@
 import mx from "@mxgraph-app/mx";
 import { AbstractPalette } from "../AbstractPalette";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxResources } = mx;
 
 export class BasicPalette extends AbstractPalette {

@@ -1,3 +1,4 @@
+export * from "./adder";
 export * from "./bpmn";
 export * from "./misc";
 export * from "./Palettes";

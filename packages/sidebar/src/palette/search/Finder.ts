@@ -1,6 +1,6 @@
 import mx from "@mxgraph-app/mx";
 import { SearchPalette } from "./SearchPalette";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 const { mxResources } = mx;
 
 export class Finder extends SearchPalette {

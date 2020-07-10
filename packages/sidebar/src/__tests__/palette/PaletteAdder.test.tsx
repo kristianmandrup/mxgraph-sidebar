@@ -1,5 +1,5 @@
 import { PaletteAdder } from "../../palette";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../side";
 import { editorUi } from "../mocks";
 
 describe("PaletteAdder", () => {

@@ -1,14 +1,11 @@
 import mx from "@mxgraph-app/mx";
 import resources from "@mxgraph-app/resources";
-import { Thumbnail } from "./Thumbnail";
+import { Thumbnail } from "../thumbnail";
 import { SidebarInitializer } from "./SidebarInitializer";
-import { SearchPalette, PaletteManager, Palettes } from "./palette";
-import { DropHandler } from "./drag-drop/drop/DropHandler";
-import { DropConnect } from "./drag-drop/drop/connector/DropConnect";
-import { DragSource } from "./drag-drop/drag/DragSource";
-import { ClickHandler } from "./ClickHandler";
-import { SingleClickInserter } from "./SingleClickInserter";
-import { FoldingHandler } from "./FoldingHandler";
+import { SearchPalette, PaletteManager, Palettes } from "../palette";
+import { DropHandler, DropConnect, DragSource } from "../drag-drop";
+import { ClickHandler, SingleClickInserter } from "../click";
+import { FoldingHandler } from "../folding";
 import { SidebarDestroyer } from "./SidebarDestroyer";
 import { SidebarItemCreator } from "./SidebarItemCreator";
 // import { HoverIcons } from "";
@@ -454,7 +451,7 @@ export class Sidebar {
    * Create the given title element.
    */
   addFoldingHandler(title, content, funct) {
-    return new FoldingHandler(this.editorUi).add(title, content, funct);
+    return new FoldingHandler({ title, content, funct }).configure();
   }
 
   /**

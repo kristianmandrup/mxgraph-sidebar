@@ -1,5 +1,4 @@
-import { CellCreator } from "./shapes/CellCreator";
-import { AbstractShaper } from "./shapes/AbstractShaper";
+import { AbstractShaper, CellCreator } from "../shapes";
 // import { Graph } from "@mxgraph-app/graph";
 
 import mx from "@mxgraph-app/mx";

@@ -13,7 +13,7 @@ const { mxResources } = mx;
 import resources from "@mxgraph-app/resources";
 import { UmlPalette } from "./uml/UmlPalette";
 import { BpmnPalette } from "./bpmn/BmpnPalette";
-import { Sidebar } from "../Sidebar";
+import { Sidebar } from "../side";
 const { STENCIL_PATH } = resources;
 
 export class Palettes extends PaletteDelegator {

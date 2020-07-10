@@ -1,7 +1,7 @@
 import { AbstractPalette } from "../AbstractPalette";
 import { StencilIndexLoader } from "./StencilIndexLoader";
 import { StencilDefaultLoader } from "./StencilDefaultLoader";
-import { Sidebar } from "../../Sidebar";
+import { Sidebar } from "../../";
 
 export class StencilPalette extends AbstractPalette {
   addStencilsToIndex: any; // fn

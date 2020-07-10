@@ -1,5 +1,5 @@
-import { SingleClickInserter } from "..";
-import { editorUi, graph } from "./mocks";
+import { SingleClickInserter } from "../..";
+import { editorUi, graph } from "../mocks";
 
 describe("SingleClickInserter", () => {
   const source = {};

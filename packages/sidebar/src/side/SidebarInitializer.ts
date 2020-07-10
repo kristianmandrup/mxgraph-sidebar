@@ -1,7 +1,7 @@
-import { Sidebar } from "./Sidebar";
-import { ShapeUpdater } from "./shapes/ShapeUpdater";
-import { DropCheck } from "./drag-drop/drop/DropCheck";
+import { ShapeUpdater } from "../shapes";
+import { DropCheck } from "../drag-drop";
 import mx from "@mxgraph-app/mx";
+import { Sidebar } from ".";
 const { mxClient, mxEvent } = mx;
 
 export class SidebarInitializer {

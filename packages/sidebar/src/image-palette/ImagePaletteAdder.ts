@@ -1,4 +1,4 @@
-import { Palettes } from "./palette";
+import { Palettes } from "../palette";
 import mx from "@mxgraph-app/mx";
 const { mxResources } = mx;
 
