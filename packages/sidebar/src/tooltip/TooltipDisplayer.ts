@@ -35,19 +35,30 @@ export class TooltipDisplayer {
     return this.editorUi.graph;
   }
 
-  createGraph() {
+  createGraphInstance() {
     const { graph, tooltip } = this;
     return new this.classMap.Graph(tooltip, null, null, graph.getStylesheet());
   }
 
   createTooltipAndGraph() {
-    const { tooltip, createGraph } = this;
+    const { tooltip } = this;
     this.tooltip = document.createElement("div");
     tooltip.className = "geSidebarTooltip";
     tooltip.style.zIndex = mxPopupMenu.prototype.zIndex - 1;
+    tooltip.style.display = "block";
     document.body.appendChild(tooltip);
+  }
 
-    const graph = createGraph();
+  createGraph() {
+    const { createGraphInstance } = this;
+    let graph = createGraphInstance();
+    graph = this.configureGraph();
+    this.graph2 = graph;
+    return graph;
+  }
+
+  configureGraph() {
+    const { graph, isSvg } = this;
     graph.resetViewOnRootChange = false;
     graph.foldingEnabled = false;
     graph.gridEnabled = false;
@@ -56,10 +67,9 @@ export class TooltipDisplayer {
     graph.setConnectable(false);
     graph.setEnabled(false);
 
-    if (!mxClient.IS_SVG) {
+    if (!isSvg) {
       graph.view.canvas.style.position = "relative";
     }
-    this.graph2 = graph;
     return graph;
   }
 
@@ -98,30 +108,67 @@ export class TooltipDisplayer {
     this.w2 = width;
   }
 
+  get shouldCreateTooltipTitleElem() {
+    const { tooltipTitles, title } = this;
+    return tooltipTitles && title != null && title.length > 0;
+  }
+
+  createTooltipTitleElem() {
+    const tooltipTitle = document.createElement("div");
+    tooltipTitle.style.borderTop = "1px solid gray";
+    tooltipTitle.style.textAlign = "center";
+    tooltipTitle.style.width = "100%";
+    tooltipTitle.style.overflow = "hidden";
+    tooltipTitle.style.position = "absolute";
+    tooltipTitle.style.paddingTop = "6px";
+    tooltipTitle.style.bottom = "6px";
+    this.tooltipTitle = tooltipTitle;
+    return tooltipTitle;
+  }
+
+  appendNewTooltipTitleElem() {
+    const { tooltip } = this;
+    const tooltipTitle = this.createTooltipTitleElem();
+    tooltip.appendChild(tooltipTitle);
+  }
+
+  resetTooltipTitleElem() {
+    this.tooltipTitle.innerHTML = "";
+  }
+
   setTooltipTitle() {
-    const { tooltipTitles, tooltipTitle, tooltip, title } = this;
+    const { appendAndStyleTooltipTitle, hideTooltipTitle } = this;
     // Adds title for entry
-    if (tooltipTitles && title != null && title.length > 0) {
-      if (tooltipTitle == null) {
-        const tooltipTitle = document.createElement("div");
-        tooltipTitle.style.borderTop = "1px solid gray";
-        tooltipTitle.style.textAlign = "center";
-        tooltipTitle.style.width = "100%";
-        tooltipTitle.style.overflow = "hidden";
-        tooltipTitle.style.position = "absolute";
-        tooltipTitle.style.paddingTop = "6px";
-        tooltipTitle.style.bottom = "6px";
+    appendAndStyleTooltipTitle() || hideTooltipTitle();
+  }
 
-        tooltip.appendChild(tooltipTitle);
-      } else {
-        tooltipTitle.innerHTML = "";
-      }
+  appendAndStyleTooltipTitle() {
+    if (!this.shouldCreateTooltipTitleElem) return;
+    const {
+      appendNewTooltipTitleElem,
+      tooltipTitle,
+      resetTooltipTitleElem,
+      styleTooltipTitle,
+    } = this;
+    !tooltipTitle ? appendNewTooltipTitleElem() : resetTooltipTitleElem();
+    styleTooltipTitle();
+    return true;
+  }
 
-      tooltipTitle.style.display = "";
-      mxUtils.write(tooltipTitle, title);
-    } else if (tooltipTitle != null && tooltipTitle.parentNode != null) {
-      tooltipTitle.style.display = "none";
-    }
+  hideTooltipTitle() {
+    if (!this.hasTooltipTitle) return;
+    this.tooltipTitle.style.display = "none";
+  }
+
+  get hasTooltipTitle() {
+    const { tooltipTitle } = this;
+    return tooltipTitle && tooltipTitle.parentNode;
+  }
+
+  styleTooltipTitle() {
+    const { title, tooltipTitle } = this;
+    tooltipTitle.style.display = "";
+    mxUtils.write(tooltipTitle, title);
   }
 
   allowWiderLabels() {
@@ -202,67 +249,82 @@ export class TooltipDisplayer {
     );
   }
 
+  initGraph() {
+    const { graph2, tooltipBorder, showLabel } = this;
+    graph2.model.clear();
+    graph2.view.setTranslate(tooltipBorder, tooltipBorder);
+    graph2.labelsVisible = showLabel == null || showLabel;
+    this.addCellsToGraph();
+  }
+
+  addCellsToGraph() {
+    const { graph2, cells, originalNoForeignObject } = this;
+    const fo = mxClient.NO_FO;
+    mxClient.NO_FO = originalNoForeignObject;
+    graph2.addCells(cells);
+    mxClient.NO_FO = fo;
+  }
+
   show = () => {
-    const {
-      graph2,
-      tooltip,
-      createTooltipAndGraph,
-      tooltipBorder,
-      width,
-      height,
-      showLabel,
-      originalNoForeignObject,
-      cells,
-    } = this;
+    const { graph2, tooltip, createTooltipAndGraph } = this;
 
     // Lazy creation of the DOM nodes and graph instance
     if (!tooltip) {
       createTooltipAndGraph();
     }
-    graph2.model.clear();
-    graph2.view.setTranslate(tooltipBorder, tooltipBorder);
+    this.initGraph();
     this.scaleGraph();
 
-    tooltip.style.display = "block";
-    graph2.labelsVisible = showLabel == null || showLabel;
-    const fo = mxClient.NO_FO;
-
-    mxClient.NO_FO = originalNoForeignObject;
-    graph2.addCells(cells);
-    mxClient.NO_FO = fo;
-
     this.setTooltipBounds();
-
     this.setTooltipTitle();
 
-    const { w2, x0, y0, left, top } = this;
+    const { isSvg, svgTransform, setDrawPaneStyle, ie9QuirksFix } = this;
+    this.adjustTooltipBounds();
+
+    isSvg ? svgTransform() : setDrawPaneStyle();
+    this.graph2 = graph2;
+
+    ie9QuirksFix();
+    this.tooltip = tooltip;
+  };
+
+  // Workaround for ignored position CSS style in IE9
+  // (changes to relative without the following line)
+  ie9QuirksFix() {
+    const { tooltip, left, top } = this;
+    tooltip.style.position = "absolute";
+    tooltip.style.left = left + "px";
+    tooltip.style.top = top + "px";
+  }
+
+  adjustTooltipBounds() {
+    const { tooltip, w2, width, height } = this;
     // Updates width if label is wider
     if (w2 > width) {
       tooltip.style.width = w2 + "px";
     }
-
     tooltip.style.height = height + "px";
+  }
 
-    if (mxClient.IS_SVG) {
-      if (x0 != 0 || y0 != 0) {
-        graph2.view.canvas.setAttribute(
-          "transform",
-          "translate(" + x0 + "," + y0 + ")"
-        );
-      } else {
-        graph2.view.canvas.removeAttribute("transform");
-      }
+  setDrawPaneStyle() {
+    const { graph2, x0, y0 } = this;
+    graph2.view.drawPane.style.left = x0 + "px";
+    graph2.view.drawPane.style.top = y0 + "px";
+  }
+
+  svgTransform() {
+    const { graph2, x0, y0 } = this;
+    if (x0 != 0 || y0 != 0) {
+      graph2.view.canvas.setAttribute(
+        "transform",
+        "translate(" + x0 + "," + y0 + ")"
+      );
     } else {
-      graph2.view.drawPane.style.left = x0 + "px";
-      graph2.view.drawPane.style.top = y0 + "px";
+      graph2.view.canvas.removeAttribute("transform");
     }
-    this.graph2 = graph2;
+  }
 
-    // Workaround for ignored position CSS style in IE9
-    // (changes to relative without the following line)
-    tooltip.style.position = "absolute";
-    tooltip.style.left = left + "px";
-    tooltip.style.top = top + "px";
-    this.tooltip = tooltip;
-  };
+  get isSvg() {
+    return mxClient.IS_SVG;
+  }
 }

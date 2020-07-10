@@ -45,28 +45,47 @@ export class Tooltip {
     return new mxPoint(0, 0);
   }
 
+  get shouldShowTooltips() {
+    return this.enableTooltips && this.showTooltips;
+  }
+
+  isNewElement(element) {
+    return this.currentElt != element;
+  }
+
+  get isTooltipVisible() {
+    return this.tooltip && this.tooltip.style.display != "none";
+  }
+
   /**
    * Adds all palettes to the sidebar.
    */
   // cells, w, h, title, showLabel?: boolean
   showTooltip(element, opts: any = {}) {
-    const { show } = this;
-    if (this.enableTooltips && this.showTooltips) {
-      if (this.currentElt != element) {
-        if (this.thread != null) {
-          window.clearTimeout(this.thread);
-          this.thread = null;
-        }
+    const {
+      isNewElement,
+      show,
+      shouldShowTooltips,
+      isTooltipVisible,
+      showLater,
+      resetThread,
+    } = this;
+    if (!shouldShowTooltips || !isNewElement(element)) return;
 
-        if (this.tooltip != null && this.tooltip.style.display != "none") {
-          show(element, opts);
-        } else {
-          this.thread = window.setTimeout(show, this.tooltipDelay);
-        }
+    resetThread();
+    isTooltipVisible ? show(element, opts) : showLater();
+    this.currentElt = element;
+  }
 
-        this.currentElt = element;
-      }
-    }
+  resetThread() {
+    const { thread } = this;
+    if (!thread) return;
+    window.clearTimeout(thread);
+    this.thread = null;
+  }
+
+  showLater() {
+    this.thread = window.setTimeout(this.show, this.tooltipDelay);
   }
 
   show(element, opts: any = {}) {
@@ -77,18 +96,17 @@ export class Tooltip {
     }).show();
   }
 
+  resetTooltip() {
+    if (!this.tooltip) return;
+    this.tooltip.style.display = "none";
+    this.currentElt = null;
+  }
+
   /**
    * Hides the current tooltip.
    */
   hideTooltip() {
-    if (this.thread != null) {
-      window.clearTimeout(this.thread);
-      this.thread = null;
-    }
-
-    if (this.tooltip != null) {
-      this.tooltip.style.display = "none";
-      this.currentElt = null;
-    }
+    this.resetThread();
+    this.resetTooltip();
   }
 }
