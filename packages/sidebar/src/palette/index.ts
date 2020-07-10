@@ -7,6 +7,6 @@ export * from "./stencil";
 export * from "./search";
 export * from "./image";
 export * from "./general";
-export * from "./PaletteAdder";
+export * from "./adder/PaletteAdder";
 export * from "./PaletteManager";
 export * from "./Palettes";

@@ -8,7 +8,7 @@ import { PaletteDelegator } from "./PaletteDelegator";
 
 import mx from "@mxgraph-app/mx";
 import { AdvancedShapes } from "../shapes/AdvancedShapes";
-import { PaletteAdder } from "./PaletteAdder";
+import { PaletteAdder } from "./adder/PaletteAdder";
 const { mxResources } = mx;
 import resources from "@mxgraph-app/resources";
 import { UmlPalette } from "./uml/UmlPalette";

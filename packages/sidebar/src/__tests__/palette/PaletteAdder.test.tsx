@@ -21,19 +21,19 @@ describe("PaletteAdder", () => {
     });
 
     describe("methods", () => {
-      describe("#addPalette", () => {
+      describe("addPalette(id, title, {expanded, onInit})", () => {
         const id = "x";
         const title = "stuff";
         const expanded = true;
         const onInit = () => {};
 
         test("does not throw", () => {
-          expect(instance.addPalette(id, title, expanded, onInit)).not
+          expect(instance.addPalette(id, title, { expanded, onInit })).not
             .toThrow();
         });
       });
 
-      describe("#addFoldingHandler", () => {
+      describe("addFoldingHandler(title, content, funct)", () => {
         const title = "stuffed";
         const content = "some stuff";
         const funct = () => {};
@@ -44,17 +44,22 @@ describe("PaletteAdder", () => {
         });
       });
 
-      describe("#removePalette", () => {
-        describe("#palette id NOT present", () => {
-          test("does not throw", () => {
-            expect(instance.removePalette("unknown")).not.toThrow();
-          });
-        });
+      describe("storePaletteElements(id, titleElement)", () => {
+        const titleElement = document.createElement("div");
+        const id = "basic";
 
-        describe("#palette id present", () => {
-          test("does not throw", () => {
-            expect(instance.removePalette("basic")).not.toThrow();
-          });
+        test("does not throw", () => {
+          expect(instance.storePaletteElements(id, titleElement)).not
+            .toThrow();
+        });
+      });
+
+      describe("appendTitleToContainer(title)", () => {
+        const title = "basic";
+
+        test("does not throw", () => {
+          expect(instance.appendTitleToContainer(title)).not
+            .toThrow();
         });
       });
     });
