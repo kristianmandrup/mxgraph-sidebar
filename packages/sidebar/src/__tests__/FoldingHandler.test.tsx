@@ -47,19 +47,84 @@ describe("ImagePaletteAdder", () => {
 
     describe("methods", () => {
       const title = "xx", content = "avc", funct = () => {};
-      describe("add", () => {
+      describe("add(title, content, funct)", () => {
         test("does not throw", () => {
-          expect(handler.add(title, content, funct)).not.toThrow();
+          expect(() => handler.add(title, content, funct)).not.toThrow();
         });
       });
 
-      // preventFocus()
-      // set(title, content, funct)
-      // setTitle(title?)
-      // addClickHandler()
-      // clickListener(evt)
-      // contentDisplay()
-      // contentHidden()
+      describe("set(title, content, funct)", () => {
+        test("does not throw", () => {
+          expect(() => handler.set(title, content, funct)).not.toThrow();
+        });
+      });
+
+      describe("preventFocus()", () => {
+        test("does not throw", () => {
+          expect(() => handler.preventFocus()).not.toThrow();
+        });
+      });
+
+      describe("setTitle(title?)", () => {
+        test("does not throw", () => {
+          expect(() => handler.setTitle(title)).not.toThrow();
+        });
+      });
+
+      describe("addClickHandler()", () => {
+        test("does not throw", () => {
+          expect(() => handler.addClickHandler()).not.toThrow();
+        });
+      });
+
+      describe("clickListener(evt)", () => {
+        test("does not throw", () => {
+          const evt = { msg: "hello" };
+          expect(() => handler.clickListener(evt)).not.toThrow();
+        });
+      });
+
+      describe("contentDisplay()", () => {
+        test("does not throw", () => {
+          expect(() => handler.contentDisplay()).not.toThrow();
+        });
+      });
+
+      describe("contentHidden()", () => {
+        test("does not throw", () => {
+          expect(() => handler.contentHidden()).not.toThrow();
+        });
+      });
+
+      describe("initialize()", () => {
+        test("does not throw", () => {
+          expect(() => handler.initialize()).not.toThrow();
+        });
+      });
+
+      describe("doDefault()", () => {
+        test("does not throw", () => {
+          expect(() => handler.doDefault()).not.toThrow();
+        });
+      });
+
+      describe("doInitialize()", () => {
+        test("does not throw", () => {
+          expect(() => handler.doInitialize()).not.toThrow();
+        });
+      });
+
+      describe("ensureWaitCursorMac()", () => {
+        test("does not throw", () => {
+          expect(() => handler.ensureWaitCursorMac()).not.toThrow();
+        });
+      });
+
+      describe("setWindowTimeout()", () => {
+        test("does not throw", () => {
+          expect(() => handler.setWindowTimeout()).not.toThrow();
+        });
+      });
     });
   });
 });

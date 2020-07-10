@@ -155,7 +155,7 @@ export class Palettes extends PaletteDelegator {
     new this.paletteMap.bpmn().addBpmnPalette(dir, expand);
   }
 
-  addImagePalette(id, title, prefix, postfix, items, titles, tags) {
+  addImagePalette(id, { title, prefix, postfix, items, titles, tags }) {
     new this.paletteMap.image().addImagePalette(
       id,
       title,

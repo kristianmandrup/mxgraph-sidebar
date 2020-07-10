@@ -50,18 +50,43 @@ export class ImagePaletteAdder {
     this.dir = opts.dir;
   }
 
-  add() {
-    const { dir, palettes, items } = this;
-    const id = "clipart";
-    const title = mxResources.get("clipart");
-    const prefix = dir + "/clipart/";
-    const postfix = "_128x128.png";
-    const titles = null;
-    const tags = {
+  get id() {
+    return "clipart";
+  }
+
+  get title() {
+    return mxResources.get("clipart");
+  }
+
+  get prefix() {
+    return this.dir + "/clipart/";
+  }
+
+  get postfix() {
+    return "_128x128.png";
+  }
+
+  get tags() {
+    return {
       Wireless_Router_N: "wireless router switch wap wifi access point wlan",
       Router_Icon: "router switch",
     };
+  }
 
-    palettes.addImagePalette(id, title, prefix, postfix, items, titles, tags);
+  get titles() {
+    return null;
+  }
+
+  add(id?) {
+    const { palettes, items, title, prefix, postfix, titles, tags } = this;
+    id = id || this.id;
+    palettes.addImagePalette(id, {
+      title,
+      prefix,
+      postfix,
+      items,
+      titles,
+      tags,
+    });
   }
 }

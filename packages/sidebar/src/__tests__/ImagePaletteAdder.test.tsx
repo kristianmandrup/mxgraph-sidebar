@@ -32,12 +32,48 @@ describe("ImagePaletteAdder", () => {
           expect(adder.items.length).toBeGreaterThan(0);
         });
       });
+
+      describe("id", () => {
+        test("is set", () => {
+          expect(adder.id).toEqual("clipart");
+        });
+      });
+
+      describe("title", () => {
+        test("is set", () => {
+          expect(adder.title).toBeDefined();
+        });
+      });
+
+      describe("prefix", () => {
+        test("is set", () => {
+          expect(adder.prefix).toBeDefined();
+        });
+      });
+
+      describe("postfix", () => {
+        test("is set", () => {
+          expect(adder.postfix).toBeDefined();
+        });
+      });
+
+      describe("tags", () => {
+        test("is set", () => {
+          expect(adder.tags).toBeDefined();
+        });
+      });
+
+      describe("titles", () => {
+        test("is set", () => {
+          expect(adder.titles).not.toBeUndefined();
+        });
+      });
     });
   });
 
   describe("methods", () => {
-    describe("add", () => {
-      test("to be set", () => {
+    describe("add()", () => {
+      test("not to throw", () => {
         expect(() => adder.add()).not.toThrow();
       });
     });

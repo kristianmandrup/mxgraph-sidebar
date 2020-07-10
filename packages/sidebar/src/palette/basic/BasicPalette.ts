@@ -15,24 +15,46 @@ export class BasicPalette extends AbstractPalette {
    * Adds the general palette to the sidebar.
    */
   addBasicPalette(dir) {
+    const { id, style, partialRectangles, title, filePath } = this;
     this.addStencilPalette(
-      "basic",
-      mxResources.get("basic"),
-      dir + "/basic.xml",
-      ";whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2",
+      id,
+      title,
+      filePath(dir),
+      style,
       null,
       null,
       null,
       null,
-      [
-        this.partialRectangle1,
-        this.partialRectangle2,
-        this.partialRectangle3,
-        this.partialRectangle4,
-      ]
+      partialRectangles
     );
   }
 
+  get id() {
+    return "basic";
+  }
+
+  get title() {
+    return mxResources.get("basic");
+  }
+
+  filePath(dir) {
+    return dir + "/basic.xml";
+  }
+
+  get style() {
+    return ";whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2";
+  }
+
+  get partialRectangles() {
+    return [
+      this.partialRectangle1,
+      this.partialRectangle2,
+      this.partialRectangle3,
+      this.partialRectangle4,
+    ];
+  }
+
+  // TODO: extract each to separate class
   get partialRectangle1() {
     return this.createVertexTemplateEntry(
       "shape=partialRectangle;whiteSpace=wrap;html=1;top=0;bottom=0;fillColor=none;",

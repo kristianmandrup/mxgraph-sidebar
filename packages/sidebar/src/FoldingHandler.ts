@@ -16,6 +16,8 @@ export class FoldingHandler {
   title: any;
   content: any;
   funct: any;
+  initialized: boolean = false;
+  prev: any;
 
   constructor(sidebar: Sidebar) {
     this.sidebar = sidebar;
@@ -77,6 +79,7 @@ export class FoldingHandler {
 
     title.style.backgroundRepeat = "no-repeat";
     title.style.backgroundPosition = "0% 50%";
+    return title;
   }
 
   addClickHandler() {
@@ -97,39 +100,53 @@ export class FoldingHandler {
   };
 
   contentHidden = () => {
-    const { title, content, funct } = this;
-    let initialized;
+    const { title, content, initialize, doDefault } = this;
     if (content.style.display != "none") return;
-    if (!initialized) {
-      initialized = true;
-
-      if (funct != null) {
-        // Wait cursor does not show up on Mac
-        title.style.cursor = "wait";
-        var prev = title.innerHTML;
-        title.innerHTML = mxResources.get("loading") + "...";
-
-        window.setTimeout(
-          () => {
-            content.style.display = "block";
-            title.style.cursor = "";
-            title.innerHTML = prev;
-
-            var fo = mxClient.NO_FO;
-            mxClient.NO_FO = this.originalNoForeignObject;
-            funct(content, title);
-            mxClient.NO_FO = fo;
-          },
-          mxClient.IS_FF ? 20 : 0
-        );
-      } else {
-        content.style.display = "block";
-      }
-    } else {
-      content.style.display = "block";
-    }
-
+    initialize() || doDefault();
     title.style.backgroundImage = "url('" + this.expandedImage + "')";
     return true;
+  };
+
+  doDefault = () => {
+    this.content.style.display = "block";
+  };
+
+  initialize = () => {
+    const { funct, doInitialize, doDefault } = this;
+    if (this.initialized) return;
+    this.initialized = true;
+    funct ? doInitialize() : doDefault();
+    return true;
+  };
+
+  doInitialize = () => {
+    const { ensureWaitCursorMac, setWindowTimeout } = this;
+    ensureWaitCursorMac();
+    setWindowTimeout();
+  };
+
+  ensureWaitCursorMac() {
+    const { title } = this;
+    // Wait cursor does not show up on Mac
+    title.style.cursor = "wait";
+    this.prev = title.innerHTML;
+    title.innerHTML = mxResources.get("loading") + "...";
+  }
+
+  setWindowTimeout = () => {
+    const { title, content, funct, prev } = this;
+    window.setTimeout(
+      () => {
+        content.style.display = "block";
+        title.style.cursor = "";
+        title.innerHTML = prev;
+
+        var fo = mxClient.NO_FO;
+        mxClient.NO_FO = this.originalNoForeignObject;
+        funct(content, title);
+        mxClient.NO_FO = fo;
+      },
+      mxClient.IS_FF ? 20 : 0
+    );
   };
 }
