@@ -11,4 +11,40 @@ describe("SidebarDestroyer", () => {
   beforeAll(() => {
     instance = new SidebarDestroyer(sidebar);
   });
+
+  describe("instance", () => {
+    describe("properties", () => {
+      describe("editorUi", () => {
+        test("to be set", () => {
+          expect(instance.editorUi).toBe(editorUi);
+        });
+      });
+
+      describe("pointerUpHandler", () => {
+        test("to be set", () => {
+          expect(instance.pointerUpHandler).toBeDefined();
+        });
+      });
+
+      describe("pointerDownHandler", () => {
+        test("to be set", () => {
+          expect(instance.pointerDownHandler).toBeDefined();
+        });
+      });
+
+      describe("pointerMoveHandler", () => {
+        test("to be set", () => {
+          expect(instance.pointerMoveHandler).toBeDefined();
+        });
+      });
+
+      describe("pointerOutHandler", () => {
+        test("to be set", () => {
+          expect(instance.pointerOutHandler).toBeDefined();
+        });
+      });
+    });
+  });
+
+  describe("methods", () => {});
 });

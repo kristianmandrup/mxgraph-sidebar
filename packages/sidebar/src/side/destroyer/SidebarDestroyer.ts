@@ -31,6 +31,26 @@ export class SidebarDestroyer {
   }
 
   destroy() {
+    const { destroyGraph, removePointerHandlers } = this;
+    destroyGraph();
+    removePointerHandlers();
+  }
+
+  removePointerHandlers() {
+    const {
+      removePointerMoveHandler,
+      removePointerOutHandler,
+      removePointerDownHandler,
+      removePointerUpHandler,
+    } = this;
+
+    removePointerOutHandler();
+    removePointerMoveHandler();
+    removePointerDownHandler();
+    removePointerUpHandler();
+  }
+
+  destroyGraph() {
     if (this.graph != null) {
       if (
         this.graph.container != null &&
@@ -42,25 +62,9 @@ export class SidebarDestroyer {
       this.graph.destroy();
       this.editorUi.graph = null;
     }
+  }
 
-    if (this.pointerUpHandler != null) {
-      mxEvent.removeListener(
-        document,
-        mxClient.IS_POINTER ? "pointerup" : "mouseup",
-        this.pointerUpHandler
-      );
-      this.pointerUpHandler = null;
-    }
-
-    if (this.pointerDownHandler != null) {
-      mxEvent.removeListener(
-        document,
-        mxClient.IS_POINTER ? "pointerdown" : "mousedown",
-        this.pointerDownHandler
-      );
-      this.pointerDownHandler = null;
-    }
-
+  removePointerMoveHandler() {
     if (this.pointerMoveHandler != null) {
       mxEvent.removeListener(
         document,
@@ -69,7 +73,9 @@ export class SidebarDestroyer {
       );
       this.pointerMoveHandler = null;
     }
+  }
 
+  removePointerOutHandler() {
     if (this.pointerOutHandler != null) {
       mxEvent.removeListener(
         document,
@@ -77,6 +83,28 @@ export class SidebarDestroyer {
         this.pointerOutHandler
       );
       this.pointerOutHandler = null;
+    }
+  }
+
+  removePointerDownHandler() {
+    if (this.pointerDownHandler != null) {
+      mxEvent.removeListener(
+        document,
+        mxClient.IS_POINTER ? "pointerdown" : "mousedown",
+        this.pointerDownHandler
+      );
+      this.pointerDownHandler = null;
+    }
+  }
+
+  removePointerUpHandler() {
+    if (this.pointerUpHandler != null) {
+      mxEvent.removeListener(
+        document,
+        mxClient.IS_POINTER ? "pointerup" : "mouseup",
+        this.pointerUpHandler
+      );
+      this.pointerUpHandler = null;
     }
   }
 }

@@ -134,6 +134,6 @@ export class SidebarEntries extends AbstractShaper {
     new SidebarSearch(this, {
       success,
       error,
-    }).searchEntries(searchTerms, count, page);
+    }).searchEntries(searchTerms, { count, page });
   }
 }
