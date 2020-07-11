@@ -37,17 +37,77 @@ describe("SidebarInitializer", () => {
           expect(initializer.container).toBe(container);
         });
       });
+
+      describe("graph", () => {
+        test("is set", () => {
+          expect(initializer.graph).toBeDefined();
+        });
+      });
     });
 
     describe("methods", () => {
+      describe("appendGraphElemToDocument()", () => {
+        test("no throw", () => {
+          expect(() => initializer.appendGraphElemToDocument()).toBeDefined();
+        });
+      });
+
+      describe("configure()", () => {
+        test("no throw", () => {
+          expect(() => initializer.configure()).toBeDefined();
+        });
+      });
+
+      describe("configureSideBar()", () => {
+        test("no throw", () => {
+          expect(() => initializer.configureSideBar()).toBeDefined();
+        });
+      });
+
+      describe("configureGraph()", () => {
+        test("no throw", () => {
+          expect(() => initializer.configureGraph()).toBeDefined();
+        });
+      });
+
+      describe("addScrollHandler()", () => {
+        test("no throw", () => {
+          expect(() => initializer.addScrollHandler()).toBeDefined();
+        });
+      });
+
+      describe("addPointerHandlers()", () => {
+        test("no throw", () => {
+          expect(() => initializer.addPointerHandlers()).toBeDefined();
+        });
+      });
+
+      describe("addPointerMoveHandler()", () => {
+        test("no throw", () => {
+          expect(() => initializer.addPointerMoveHandler()).toBeDefined();
+        });
+      });
+
+      describe("addPointerOutHandler()", () => {
+        test("no throw", () => {
+          expect(() => initializer.addPointerOutHandler()).toBeDefined();
+        });
+      });
+
+      describe("addPointerDownHandler()", () => {
+        test("no throw", () => {
+          expect(() => initializer.addPointerDownHandler()).toBeDefined();
+        });
+      });
+
+      describe("addPointerUpHandler()", () => {
+        test("no throw", () => {
+          expect(() => initializer.addPointerUpHandler()).toBeDefined();
+        });
+      });
+
       describe("#initialize", () => {
         initializer.initialize();
-
-        describe("graph", () => {
-          test("is set", () => {
-            expect(initializer.graph).toBeDefined();
-          });
-        });
 
         describe("sidebar handlers", () => {
           describe("pointerUpHandler", () => {
