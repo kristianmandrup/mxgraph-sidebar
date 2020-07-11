@@ -7,11 +7,11 @@ export class SidebarSearch {
   success: any;
   error: any;
 
-  searchTerms: any;
   count: number = 20;
   page: number = 0;
   results: any[] = [];
   index: number = 0;
+  searchTerms: string = "";
 
   dict: any = new mxDictionary();
   tmpDict: any = new mxDictionary();
@@ -20,24 +20,6 @@ export class SidebarSearch {
     this.sidebar = sidebar;
     this.success = success;
     this.error = error;
-  }
-
-  /**
-   * Adds shape search UI.
-   */
-  searchEntries(searchTerms, { count, page }) {
-    const { onSearchTerms, onNoSearchTerms } = this;
-    onSearchTerms(searchTerms, { count, page }) || onNoSearchTerms();
-  }
-
-  hasSearchTerms(searchTerms) {
-    return this.taglist && searchTerms;
-  }
-
-  set(searchTerms, { count, page }) {
-    this.searchTerms = searchTerms;
-    this.count = count || 20;
-    this.page = page || 0;
   }
 
   get terms() {
@@ -52,13 +34,31 @@ export class SidebarSearch {
     return this.results.length;
   }
 
-  onSearchTerms(searchTerms, { count, page }) {
+  /**
+   * Adds shape search UI.
+   */
+  searchEntries(searchTerms, { count, page }: any = {}) {
+    const { onSearchTerms, onNoSearchTerms } = this;
+    onSearchTerms(searchTerms, { count, page }) || onNoSearchTerms();
+  }
+
+  hasSearchTerms(searchTerms) {
+    return this.taglist && searchTerms;
+  }
+
+  set(searchTerms, { count, page }: any = {}) {
+    this.searchTerms = searchTerms;
+    this.count = count || 20;
+    this.page = page || 0;
+  }
+
+  onSearchTerms(searchTerms, { count, page }: any = {}) {
     this.set(searchTerms, { count, page });
     const { hasSearchTerms, success } = this;
     if (!hasSearchTerms(searchTerms)) return;
 
-    const { resetResults, terms, processSearchTerm } = this;
-    resetResults();
+    const { reset, terms, processSearchTerm } = this;
+    reset();
 
     terms.map((term) => {
       processSearchTerm(term);
@@ -69,7 +69,7 @@ export class SidebarSearch {
     return true;
   }
 
-  resetResults() {
+  reset() {
     this.results = [];
     this.index = 0;
     this.tmpDict = new mxDictionary();
@@ -84,6 +84,7 @@ export class SidebarSearch {
     processEntry(entry);
     this.dict = tmpDict;
     this.index++;
+    return true;
   }
 
   processEntry(entry) {
@@ -92,7 +93,7 @@ export class SidebarSearch {
       this.results = [];
       return;
     }
-    processSearchResults(entry);
+    return processSearchResults(entry);
   }
 
   processSearchResults(entry) {
@@ -110,7 +111,7 @@ export class SidebarSearch {
       success,
     } = this;
 
-    searchResults.find((searchResult, i) => {
+    return searchResults.find((searchResult, i) => {
       // NOTE Array does not contain duplicates
       if ((index == 0) == (dict.get(searchResult) == null)) {
         tmpDict.put(searchResult, searchResult);
