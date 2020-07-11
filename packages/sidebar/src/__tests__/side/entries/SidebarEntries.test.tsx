@@ -1,5 +1,5 @@
-import { SidebarEntries } from "../..";
-import { editorUi } from "../mocks";
+import { SidebarEntries } from "../../..";
+import { editorUi } from "../../mocks";
 
 describe("SidebarEntries", () => {
   let instance;

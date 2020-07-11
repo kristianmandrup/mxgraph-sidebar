@@ -1,7 +1,7 @@
-import { AbstractShaper, CellCreator } from "../shapes";
+import { AbstractShaper, CellCreator } from "../../shapes";
 // import { Graph } from "@mxgraph-app/graph";
-
 import mx from "@mxgraph-app/mx";
+import { SidebarSearch } from "./SidebarSearch";
 const { mxDictionary } = mx;
 
 export class SidebarEntries extends AbstractShaper {
@@ -130,51 +130,10 @@ export class SidebarEntries extends AbstractShaper {
   /**
    * Adds shape search UI.
    */
-  searchEntries(searchTerms, count, page, success, _error) {
-    if (this.taglist != null && searchTerms != null) {
-      var tmp = searchTerms.toLowerCase().split(" ");
-      var dict = new mxDictionary();
-      var max = (page + 1) * count;
-      var results: any[] = [];
-      var index = 0;
-
-      for (var i = 0; i < tmp.length; i++) {
-        if (tmp[i].length > 0) {
-          var entry = this.taglist[tmp[i]];
-          var tmpDict = new mxDictionary();
-
-          if (entry != null) {
-            var arr = entry.entries;
-            results = [];
-
-            for (var j = 0; j < arr.length; j++) {
-              var entry = arr[j];
-
-              // NOTE Array does not contain duplicates
-              if ((index == 0) == (dict.get(entry) == null)) {
-                tmpDict.put(entry, entry);
-                results.push(entry);
-
-                if (i == tmp.length - 1 && results.length == max) {
-                  success(results.slice(page * count, max), max, true, tmp);
-
-                  return;
-                }
-              }
-            }
-          } else {
-            results = [];
-          }
-
-          dict = tmpDict;
-          index++;
-        }
-      }
-
-      var len = results.length;
-      success(results.slice(page * count, (page + 1) * count), len, false, tmp);
-    } else {
-      success([], null, null, tmp);
-    }
+  searchEntries(searchTerms, count, page, success, error) {
+    new SidebarSearch(this, {
+      success,
+      error,
+    }).searchEntries(searchTerms, count, page);
   }
 }

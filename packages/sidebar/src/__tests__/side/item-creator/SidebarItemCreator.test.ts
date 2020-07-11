@@ -1,6 +1,6 @@
-import { SidebarItemCreator } from "../..";
-import { editorUi, graph } from "../mocks";
-import { Sidebar } from "../../side";
+import { SidebarItemCreator } from "../../..";
+import { editorUi, graph } from "../../mocks";
+import { Sidebar } from "../../../side";
 
 describe("SidebarItemCreator", () => {
   const opts = {};

@@ -1,13 +1,13 @@
 import mx from "@mxgraph-app/mx";
 import resources from "@mxgraph-app/resources";
 import { Thumbnail } from "../thumbnail";
-import { SidebarInitializer } from "./SidebarInitializer";
+import { SidebarInitializer } from "./initializer/SidebarInitializer";
 import { SearchPalette, PaletteManager, Palettes } from "../palette";
 import { DropHandler, DropConnect, DragSource } from "../drag-drop";
 import { ClickHandler, SingleClickInserter } from "../click";
 import { FoldingHandler } from "../folding";
-import { SidebarDestroyer } from "./SidebarDestroyer";
-import { SidebarItemCreator } from "./SidebarItemCreator";
+import { SidebarDestroyer } from "./destroyer/SidebarDestroyer";
+import { SidebarItemCreator } from "./item-creator/SidebarItemCreator";
 // import { HoverIcons } from "";
 const { mxResources, mxClient, mxUtils } = mx;
 const { STENCIL_PATH, IMAGE_PATH } = resources;

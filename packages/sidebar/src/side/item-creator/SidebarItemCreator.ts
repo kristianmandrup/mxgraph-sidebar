@@ -1,5 +1,5 @@
 import mx from "@mxgraph-app/mx";
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "../Sidebar";
 const { mxRectangle, mxClient, mxEvent } = mx;
 
 export class SidebarItemCreator {

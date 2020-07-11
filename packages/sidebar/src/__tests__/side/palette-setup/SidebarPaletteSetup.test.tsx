@@ -1,6 +1,6 @@
-import { SidebarPaletteSetup } from "../..";
-import { editorUi, graph } from "../mocks";
-import { Sidebar } from "../../side";
+import { SidebarPaletteSetup } from "../../..";
+import { editorUi, graph } from "../../mocks";
+import { Sidebar } from "../../../side";
 
 describe("SidebarPaletteSetup", () => {
   const opts = {};

@@ -1,7 +1,7 @@
 import mx from "@mxgraph-app/mx";
 const { mxClient, mxEvent } = mx;
 
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "../Sidebar";
 
 export class SidebarDestroyer {
   sidebar: Sidebar;
