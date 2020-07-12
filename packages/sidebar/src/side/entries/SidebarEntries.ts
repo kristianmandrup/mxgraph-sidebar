@@ -1,7 +1,7 @@
 import { AbstractShaper, CellCreator } from "../../shapes";
 // import { Graph } from "@mxgraph-app/graph";
 import mx from "@mxgraph-app/mx";
-import { SidebarSearch } from "./SidebarSearch";
+import { SidebarSearch } from "./search";
 const { mxDictionary } = mx;
 
 export class SidebarEntries extends AbstractShaper {

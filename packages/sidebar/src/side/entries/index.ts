@@ -1,2 +1,2 @@
 export * from "./SidebarEntries";
-export * from "./SidebarSearch";
+export * from "./search/SidebarSearch";

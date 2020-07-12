@@ -46,5 +46,13 @@ describe("SidebarDestroyer", () => {
     });
   });
 
-  describe("methods", () => {});
+  describe("methods", () => {
+    // destroy()
+    // removePointerHandlers()
+    // destroyGraph()
+    // removePointerMoveHandler()
+    // removePointerOutHandler()
+    // removePointerDownHandler()
+    // removePointerUpHandler()
+  });
 });
