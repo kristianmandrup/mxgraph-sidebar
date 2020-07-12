@@ -1,5 +1,5 @@
 import mx from "@mxgraph-app/mx";
-import { DropBase } from "./DropBase";
+import { DropBase } from "../../DropBase";
 const { mxPoint, mxUtils, mxRectangle, mxEvent } = mx;
 
 export class DropTargetEnabler extends DropBase {

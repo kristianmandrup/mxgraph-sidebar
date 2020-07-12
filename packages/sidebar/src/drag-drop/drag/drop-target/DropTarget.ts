@@ -1,5 +1,5 @@
 import mx from "@mxgraph-app/mx";
-import { DropBase } from "./DropBase";
+import { DropBase } from "../../DropBase";
 import { DropArrows } from "./DropArrows";
 const { mxDragSource, mxEvent, mxConstants } = mx;
 

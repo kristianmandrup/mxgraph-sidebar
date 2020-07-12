@@ -1,6 +1,4 @@
-import mx from "@mxgraph-app/mx";
 import { SearchTermProcessor } from "./SearchTermProcessor";
-const { mxDictionary } = mx;
 
 export class SidebarSearch {
   sidebar: any;
@@ -14,13 +12,13 @@ export class SidebarSearch {
   index: number = 0;
   searchTerms: string = "";
 
-  dict: any = new mxDictionary();
-  tmpDict: any = new mxDictionary();
+  searchTermProcessor: SearchTermProcessor;
 
   constructor(sidebar, { success, error }: any = {}) {
     this.sidebar = sidebar;
     this.success = success;
     this.error = error;
+    this.searchTermProcessor = this.createSearchTermProcessor();
   }
 
   get terms() {
@@ -70,15 +68,17 @@ export class SidebarSearch {
     return true;
   }
 
+  createSearchTermProcessor() {
+    const opts = { success: this.success };
+    return new SearchTermProcessor(this.terms, opts);
+  }
+
   processSearchTerm(term) {
-    return new SearchTermProcessor().process(term);
+    return this.searchTermProcessor.process(term);
   }
 
   reset() {
-    this.results = [];
-    this.index = 0;
-    this.tmpDict = new mxDictionary();
-    this.dict = new mxDictionary();
+    this.searchTermProcessor.reset();
   }
 
   onNoSearchTerms() {

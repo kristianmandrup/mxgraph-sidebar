@@ -1,5 +1,5 @@
 import mx from "@mxgraph-app/mx";
-import { DropBase } from "./DropBase";
+import { DropBase } from "../../DropBase";
 const { mxUtils, mxRectangle } = mx;
 
 export class DropArrows extends DropBase {

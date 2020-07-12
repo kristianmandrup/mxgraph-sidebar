@@ -4,14 +4,29 @@ const { mxDictionary } = mx;
 export class SearchTermProcessor {
   taglist: any;
   results: any;
-  dict: any;
+
   index: number = 0;
-  tmpDict: any;
+
+  dict: any = new mxDictionary();
+  tmpDict: any = new mxDictionary();
+
   page: number = 0;
   count: number = 10;
   max: number = 20;
   terms: any;
   success: any;
+
+  constructor(terms, { success }) {
+    this.terms = terms;
+    this.success = success;
+  }
+
+  reset() {
+    this.results = [];
+    this.index = 0;
+    this.tmpDict = new mxDictionary();
+    this.dict = new mxDictionary();
+  }
 
   process(term) {
     const { processEntry } = this;

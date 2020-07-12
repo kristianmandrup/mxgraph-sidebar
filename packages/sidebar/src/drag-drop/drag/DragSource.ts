@@ -2,7 +2,7 @@ import mx from "@mxgraph-app/mx";
 import { DragSourceCreator } from "./DragSourceCreator";
 import { DragArrow } from "./DragArrow";
 import { DropTarget } from "./drop-target/DropTarget";
-import { DropCheck } from "../drop/DropCheck";
+import { DropCheck } from "../drop/check/DropCheck";
 
 const { mxDragSource, mxClient, mxEvent } = mx;
 
