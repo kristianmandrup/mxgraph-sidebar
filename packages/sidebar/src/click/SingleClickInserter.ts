@@ -1,5 +1,5 @@
 import mx from "@mxgraph-app/mx";
-import { DropConnect } from "../drag-drop/drop/connector/DropConnect";
+import { DropConnect } from "../drag-drop/drop/connector/connect/DropConnect";
 import { ShapeUpdater } from "../shapes/ShapeUpdater";
 const { mxConstants, mxEvent } = mx;
 

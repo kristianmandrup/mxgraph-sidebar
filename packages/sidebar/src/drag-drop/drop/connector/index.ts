@@ -1,3 +1,3 @@
-export * from "./DropConnect";
-export * from "./DropConnectGeo";
+export * from "./connect/DropConnect";
+export * from "./geo/DropConnectGeo";
 export * from "./DropConnector";

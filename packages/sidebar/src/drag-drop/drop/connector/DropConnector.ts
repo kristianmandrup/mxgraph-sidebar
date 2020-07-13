@@ -1,5 +1,5 @@
-import { DropConnect } from "./DropConnect";
-import { DropConnectGeo } from "./DropConnectGeo";
+import { DropConnect } from "./connect/DropConnect";
+import { DropConnectGeo } from "./geo/DropConnectGeo";
 
 export class DropConnector {
   editorUi: any;
