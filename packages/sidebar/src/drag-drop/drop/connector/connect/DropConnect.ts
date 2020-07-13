@@ -85,75 +85,6 @@ export class DropConnect {
     return layoutManager.getLayout(targetParent);
   }
 
-  adjustPosition() {
-    const { geo, layoutManager, layout, graph, targetParent } = this;
-    let validLayout = true;
-    // Ignores parent if it has a stack layout
-    if (!layoutManager || !layout || layout.constructor !== mxStackLayout) {
-      this.validLayout = validLayout;
-      return;
-    }
-    // LATER: Use parent of parent if valid layout
-    validLayout = false;
-
-    let tmp = graph.view.getState(targetParent);
-
-    // Offsets by parent position
-    if (tmp) {
-      var offset = new mxPoint(
-        tmp.x / graph.view.scale - graph.view.translate.x,
-        tmp.y / graph.view.scale - graph.view.translate.y
-      );
-      geo.x += offset.x;
-      geo.y += offset.y;
-      let pt = geo.getTerminalPoint(false);
-
-      if (pt != null) {
-        pt.x += offset.x;
-        pt.y += offset.y;
-      }
-    }
-    this.validLayout = validLayout;
-    this.geo = geo;
-  }
-
-  getTargets() {
-    const { useParent, dx, dy, targetParent, targets, geo, graph } = this;
-    return graph.importCells(
-      targets,
-      geo.x - (useParent ? dx : 0),
-      geo.y - (useParent ? dy : 0),
-      useParent ? targetParent : null
-    );
-  }
-
-  get dx() {
-    return this._dx;
-  }
-
-  set dx(val) {
-    this._dx = val;
-  }
-
-  get dy() {
-    return this._dy;
-  }
-
-  set dy(val) {
-    this._dy = val;
-  }
-
-  setDeltaGeo() {
-    const { geo2 } = this;
-    this.dx = geo2.x;
-    this.dy = geo2.y;
-  }
-
-  setDelta(dx, dy) {
-    this.dx = dx;
-    this.dy = dy;
-  }
-
   get isTargetEdge() {
     const { graph, targets, dropCellIndex } = this;
     return graph.model.isEdge(targets[dropCellIndex]);
@@ -206,6 +137,75 @@ export class DropConnect {
       useParent,
       geo,
     });
+  }
+
+  get dx() {
+    return this._dx;
+  }
+
+  set dx(val) {
+    this._dx = val;
+  }
+
+  get dy() {
+    return this._dy;
+  }
+
+  set dy(val) {
+    this._dy = val;
+  }
+
+  adjustPosition() {
+    const { geo, layoutManager, layout, graph, targetParent } = this;
+    let validLayout = true;
+    // Ignores parent if it has a stack layout
+    if (!layoutManager || !layout || layout.constructor !== mxStackLayout) {
+      this.validLayout = validLayout;
+      return;
+    }
+    // LATER: Use parent of parent if valid layout
+    validLayout = false;
+
+    let tmp = graph.view.getState(targetParent);
+
+    // Offsets by parent position
+    if (tmp) {
+      var offset = new mxPoint(
+        tmp.x / graph.view.scale - graph.view.translate.x,
+        tmp.y / graph.view.scale - graph.view.translate.y
+      );
+      geo.x += offset.x;
+      geo.y += offset.y;
+      let pt = geo.getTerminalPoint(false);
+
+      if (pt != null) {
+        pt.x += offset.x;
+        pt.y += offset.y;
+      }
+    }
+    this.validLayout = validLayout;
+    this.geo = geo;
+  }
+
+  getTargets() {
+    const { useParent, dx, dy, targetParent, targets, geo, graph } = this;
+    return graph.importCells(
+      targets,
+      geo.x - (useParent ? dx : 0),
+      geo.y - (useParent ? dy : 0),
+      useParent ? targetParent : null
+    );
+  }
+
+  setDeltaGeo() {
+    const { geo2 } = this;
+    this.dx = geo2.x;
+    this.dy = geo2.y;
+  }
+
+  setDelta(dx, dy) {
+    this.dx = dx;
+    this.dy = dy;
   }
 
   /**
@@ -278,17 +278,17 @@ export class DropConnect {
     isEditingCell && editCell();
   }
 
-  editCell() {
-    const { graph, editingCell } = this;
-    window.setTimeout(function () {
-      graph.startEditing(editingCell);
-    }, 0);
-  }
-
   get isEditingCell() {
     const { graph, evt, editingCell } = this;
     return (
       graph.editAfterInsert && evt && mxEvent.isMouseEvent(evt) && editingCell
     );
+  }
+
+  editCell() {
+    const { graph, editingCell } = this;
+    window.setTimeout(function () {
+      graph.startEditing(editingCell);
+    }, 0);
   }
 }

@@ -1,6 +1,5 @@
-import { ShapeUpdater } from "../../shapes";
+import { CellCreator, ShapeUpdater } from "../../shapes";
 import { editorUi } from "../mocks";
-import { CellCreator } from "../../shapes/CellCreator";
 
 describe("ImagePaletteAdder", () => {
   const cellCreator = new CellCreator();

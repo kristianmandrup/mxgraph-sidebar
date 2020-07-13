@@ -1,6 +1,6 @@
 import { editorUi } from "../mocks";
 import { CellCreator } from "../../shapes/CellCreator";
-import { SidebarEntries } from "../../SidebarEntries";
+import { SidebarEntries } from "../../side";
 
 describe("ImagePaletteAdder", () => {
   describe("create - no entries", () => {
@@ -19,7 +19,7 @@ describe("ImagePaletteAdder", () => {
   });
 
   describe("create - with entries", () => {
-    const entries = new SidebarEntries();
+    const entries = new SidebarEntries(editorUi);
 
     let creator;
     beforeAll(() => {
