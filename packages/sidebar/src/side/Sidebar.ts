@@ -364,12 +364,12 @@ export class Sidebar {
    * Creates a drop handler for inserting the given cells.
    */
   createDropHandler(cells, allowSplit, allowCellsInserted, bounds) {
-    return new DropHandler().create(
+    return new DropHandler(this.editorUi, {
       cells,
       allowSplit,
       allowCellsInserted,
-      bounds
-    );
+      bounds,
+    }).create();
   }
 
   /**

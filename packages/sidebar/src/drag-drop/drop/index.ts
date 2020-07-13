@@ -1,3 +1,3 @@
-export * from "./check/DropCheck";
-export * from "./DropHandler";
+export * from "./check";
+export * from "./handler";
 export * from "./connector";
