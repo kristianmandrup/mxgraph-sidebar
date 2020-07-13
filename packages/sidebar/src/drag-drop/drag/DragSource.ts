@@ -1,6 +1,6 @@
 import mx from "@mxgraph-app/mx";
 import { DragSourceCreator } from "./DragSourceCreator";
-import { DragArrow } from "./DragArrow";
+import { DragArrow } from "./arrow/DragArrow";
 import { DropTarget } from "./drop-target/DropTarget";
 import { DropCheck } from "../drop/check/DropCheck";
 

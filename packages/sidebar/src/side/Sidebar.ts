@@ -388,13 +388,13 @@ export class Sidebar {
    * Creates a drag source for the given element.
    */
   dropAndConnect(source, targets, direction, dropCellIndex, evt) {
-    return new DropConnect(this.editorUi).dropAndConnect(
+    return new DropConnect(this.editorUi, {
       source,
       targets,
       direction,
       dropCellIndex,
-      evt
-    );
+      evt,
+    }).dropAndConnect();
   }
 
   /**

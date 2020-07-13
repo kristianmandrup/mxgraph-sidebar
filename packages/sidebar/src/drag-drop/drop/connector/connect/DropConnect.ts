@@ -22,16 +22,17 @@ export class DropConnect {
   _dx: any;
   _dy: any;
 
-  constructor(editorUi, { dropConnectGeo }: any = {}) {
+  constructor(editorUi, opts: any = {}) {
     this.editorUi = editorUi;
-    this.dropConnectGeo = dropConnectGeo || new DropConnectGeo(editorUi);
+    this.dropConnectGeo = opts.dropConnectGeo || new DropConnectGeo(editorUi);
+    this.set(opts);
   }
 
   get graph() {
     return this.editorUi.editor.graph;
   }
 
-  set(source, targets, direction, dropCellIndex, evt) {
+  set({ source, targets, direction, dropCellIndex, evt }) {
     this.source = source;
     this.targets = targets;
     this.direction = direction;

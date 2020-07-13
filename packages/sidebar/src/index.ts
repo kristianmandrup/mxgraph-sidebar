@@ -1,5 +1,6 @@
 export * from "./palette";
 export * from "./click";
+export * from "./drag-drop";
 export * from "./side";
 export * from "./folding";
 export * from "./image-palette";
