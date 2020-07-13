@@ -70,17 +70,25 @@ export class DragArrow {
   direction = mxConstants.DIRECTION_NORTH;
   activeArrow = null;
 
-  checkArrow = (x, y, bounds, arrow) => {
-    const { styleTarget } = this;
-    if (arrow.parentNode != null) {
-      if (mxUtils.contains(bounds, x, y)) {
-        mxUtils.setOpacity(arrow, 100);
-        this.activeArrow = arrow;
-      } else {
-        mxUtils.setOpacity(arrow, arrow == styleTarget ? 30 : 20);
-      }
-    }
+  withinBounds = (bounds, x, y) => mxUtils.contains(bounds, x, y);
 
+  arrowInsideBounds(arrow) {
+    mxUtils.setOpacity(arrow, 100);
+    this.activeArrow = arrow;
+  }
+
+  arrowOutsideBounds(arrow) {
+    const { styleTarget } = this;
+    mxUtils.setOpacity(arrow, arrow == styleTarget ? 30 : 20);
+  }
+
+  checkArrow = (x, y, bounds, arrow) => {
+    const { arrowOutsideBounds, arrowInsideBounds, withinBounds } = this;
+    if (!arrow.parentNode) return bounds;
+
+    withinBounds(bounds, x, y)
+      ? arrowInsideBounds(arrow)
+      : arrowOutsideBounds(arrow);
     return bounds;
   }; // Hides guides and preview if target is active
 

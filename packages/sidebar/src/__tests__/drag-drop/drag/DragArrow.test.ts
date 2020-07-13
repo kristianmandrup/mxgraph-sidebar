@@ -9,6 +9,13 @@ describe("DragArrow", () => {
     return img;
   };
 
+  const createBounds = (left, top, width, height) => ({
+    left,
+    top,
+    width,
+    height,
+  });
+
   const triangle = {
     triangleUp: createImg("triangleUp"),
     triangleDown: createImg("triangleDown"),
@@ -125,6 +132,66 @@ describe("DragArrow", () => {
 
         it("triangleRight is set", () => {
           expect(instance.triangleRight).toBe(triangleRight);
+        });
+      });
+
+      describe("withinBounds(bounds, x, y)", () => {
+        const bounds = createBounds(10, 10, 100, 100);
+        it("is within bounds", () => {
+          const x = 20,
+            y = 20;
+          expect(instance.withinBounds(bounds, x, y)).toBeTruthy();
+        });
+
+        it("is outside bounds", () => {
+          const x = 0,
+            y = 0;
+          expect(instance.withinBounds(bounds, x, y)).toBeFalsy();
+        });
+      });
+
+      describe("arrowInsideBounds(arrow)", () => {
+        it("sets activeArrow", () => {
+          const arrow = {};
+          instance.arrowInsideBounds(arrow);
+          expect(instance.activeArrow).toBeDefined();
+        });
+      });
+
+      describe("arrowOutsideBounds(arrow)", () => {
+        it("no throw", () => {
+          const arrow = {};
+          expect(() => instance.arrowOutsideBounds(arrow)).not.toThrow();
+        });
+      });
+
+      describe("checkArrow", () => {
+        const x = 0,
+          y = 0;
+        const bounds = createBounds(0, 0, 100, 100);
+        const arrow = {};
+        beforeAll(() => {
+          instance.checkArrow(x, y, bounds, arrow);
+        });
+
+        it("sets activeArrow", () => {
+          expect(instance.activeArrow);
+        });
+      });
+
+      describe("createArrowCreator(img, tooltip)", () => {
+        it("creates ArrowCreator instance", () => {
+          const img = createImg("arrow"),
+            tooltip = {};
+          expect(instance.createArrowCreator(img, tooltip)).toBeDefined();
+        });
+      });
+
+      describe("createArrow(img, tooltip)", () => {
+        it("creates arrow", () => {
+          const img = createImg("arrow"),
+            tooltip = {};
+          expect(instance.createArrow(img, tooltip)).toBeDefined();
         });
       });
     });
