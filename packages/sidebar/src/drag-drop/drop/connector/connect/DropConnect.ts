@@ -1,6 +1,9 @@
 import mx from "@mxgraph-app/mx";
 import { DropConnectGeo } from "../geo/DropConnectGeo";
 const { mxPoint, mxStackLayout, mxEvent, mxEventObject } = mx;
+import { SourceEdge } from "./SourceEdge";
+import { TargetEdge } from "./TargetEdge";
+import { EdgeInserter } from "./EdgeInserter";
 
 export class DropConnect {
   editorUi: any;
@@ -169,15 +172,39 @@ export class DropConnect {
   }
 
   get sourceEdge(): any {
-    return {};
+    const { graph, source, targets, dropCellIndex, direction } = this;
+    return new SourceEdge({
+      graph,
+      source,
+      targets,
+      dropCellIndex,
+      direction,
+    });
   }
 
   get edgeInserter(): any {
-    return {};
+    const { graph, source, targets, dropCellIndex, dx, dy, geo } = this;
+    return new EdgeInserter({
+      graph,
+      source,
+      targets,
+      dropCellIndex,
+      dx,
+      dy,
+      geo,
+    });
   }
 
   get targetEdge(): any {
-    return {};
+    const { graph, source, targets, dropCellIndex, useParent, geo } = this;
+    return new TargetEdge({
+      graph,
+      source,
+      targets,
+      dropCellIndex,
+      useParent,
+      geo,
+    });
   }
 
   /**

@@ -1,6 +1,6 @@
-import { PaletteManager } from "../../palette";
-import { Sidebar } from "../../Sidebar";
-import { editorUi } from "../mocks";
+import { PaletteManager } from "../../../palette";
+import { Sidebar } from "../../../side";
+import { editorUi } from "../../mocks";
 
 describe("PaletteManager", () => {
   const editorElem = document.createElement("editor");

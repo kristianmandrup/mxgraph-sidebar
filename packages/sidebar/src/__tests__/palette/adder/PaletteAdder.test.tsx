@@ -1,6 +1,6 @@
-import { PaletteAdder } from "../../palette";
-import { Sidebar } from "../../side";
-import { editorUi } from "../mocks";
+import { PaletteAdder } from "../../../palette";
+import { Sidebar } from "../../../side";
+import { editorUi } from "../../mocks";
 
 describe("PaletteAdder", () => {
   const editorElem = document.createElement("editor");
