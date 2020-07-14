@@ -14,49 +14,74 @@ export class DropTargetEnabler extends DropBase {
   dropArrow: any;
   refreshTarget: any;
 
-  enable() {
-    const {
-      refreshTarget,
-      evt,
-      x,
-      y,
-      timeOnTarget,
-      currentStyleTarget,
-      styleTargetParent,
-      styleTarget,
-      dragArrow,
-      graph,
-      dropArrow,
-    } = this;
-    const { checkArrow } = dropArrow;
+  point: any;
+  rect: any;
 
-    // Does not reset on ignored edges
-    if (
-      currentStyleTarget == null ||
+  get shouldReset() {
+    const { evt, x, y, timeOnTarget, currentStyleTarget } = this;
+    return (
+      !currentStyleTarget ||
       !mxUtils.contains(currentStyleTarget, x, y) ||
       (timeOnTarget > 1500 && !mxEvent.isShiftDown(evt))
-    ) {
-      this.currentStyleTarget = null;
+    );
+  }
 
-      if (styleTargetParent != null) {
-        styleTarget.parentNode.removeChild(styleTarget);
-        dragArrow.styleTargetParent = null;
-      }
-    } else if (currentStyleTarget != null && styleTargetParent != null) {
-      // Sets active Arrow as side effect
-      var tmp = graph.model.isEdge(currentStyleTarget.cell)
-        ? graph.view.getPoint(currentStyleTarget)
-        : new mxPoint(
-            currentStyleTarget.getCenterX(),
-            currentStyleTarget.getCenterY()
-          );
-      tmp = new mxRectangle(
-        tmp.x - refreshTarget.width / 2,
-        tmp.y - refreshTarget.height / 2,
-        refreshTarget.width,
-        refreshTarget.height
-      );
-      checkArrow(x, y, tmp, styleTarget);
-    }
+  get hasTargets() {
+    const { currentStyleTarget, styleTargetParent } = this;
+    return currentStyleTarget && styleTargetParent;
+  }
+
+  enable() {
+    const { enableTargets, resetTargets } = this;
+    // Does not reset on ignored edges
+    resetTargets() || enableTargets();
+  }
+
+  enableTargets() {
+    const { hasTargets } = this;
+    if (!hasTargets) return;
+    const { x, y, styleTarget, dropArrow, createRect } = this;
+    const { checkArrow } = dropArrow;
+
+    // Sets active Arrow as side effect
+    const rect = createRect();
+    checkArrow(x, y, rect, styleTarget);
+    return true;
+  }
+
+  createRect() {
+    const { refreshTarget, createPoint } = this;
+    const point = createPoint();
+    const rect = new mxRectangle(
+      point.x - refreshTarget.width / 2,
+      point.y - refreshTarget.height / 2,
+      refreshTarget.width,
+      refreshTarget.height
+    );
+    this.rect = rect;
+    return;
+  }
+
+  createPoint() {
+    const { currentStyleTarget, graph } = this;
+    const point = graph.model.isEdge(currentStyleTarget.cell)
+      ? graph.view.getPoint(currentStyleTarget)
+      : new mxPoint(
+          currentStyleTarget.getCenterX(),
+          currentStyleTarget.getCenterY()
+        );
+    this.point = point;
+    return point;
+  }
+
+  resetTargets() {
+    const { shouldReset } = this;
+    if (!shouldReset) return;
+    const { styleTargetParent, styleTarget, dragArrow } = this;
+    this.currentStyleTarget = null;
+    if (!styleTargetParent) return;
+    styleTarget.parentNode.removeChild(styleTarget);
+    dragArrow.styleTargetParent = null;
+    return true;
   }
 }
