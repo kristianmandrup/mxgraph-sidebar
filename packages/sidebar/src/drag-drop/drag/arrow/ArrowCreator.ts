@@ -6,36 +6,61 @@ export class ArrowCreator {
   img: any;
   tooltip: any;
 
+  arrow: any;
+
   constructor({ refreshTarget, img, tooltip }) {
     this.refreshTarget = refreshTarget;
     this.img = img;
     this.tooltip = tooltip;
   }
 
+  get isIE6() {
+    return mxClient.IS_IE && !mxClient.IS_SVG;
+  }
+
+  // TODO: refactor
   create() {
-    const { refreshTarget, ie6QuirksFix, img, tooltip } = this;
-    var arrow: any;
+    const { createArrow, setArrow } = this;
+    createArrow();
+    setArrow();
+    return this.arrow;
+  }
 
-    if (mxClient.IS_IE && !mxClient.IS_SVG) {
-      arrow = ie6QuirksFix();
-    } else {
-      arrow = mxUtils.createImage(img.src);
-      arrow.style.width = img.width + "px";
-      arrow.style.height = img.height + "px";
-    }
+  setArrow() {
+    this.setArrowTitle();
+    this.styleArrow();
+  }
 
-    if (tooltip != null) {
-      arrow.setAttribute("title", tooltip);
-    }
+  setArrowTitle() {
+    const { tooltip, arrow } = this;
+    if (!tooltip) return;
+    arrow.setAttribute("title", tooltip);
+  }
 
+  styleArrow() {
+    const { arrow, img, refreshTarget } = this;
     mxUtils.setOpacity(arrow, img == refreshTarget ? 30 : 20);
     arrow.style.position = "absolute";
     arrow.style.cursor = "crosshair";
-
     return arrow;
   }
 
-  ie6QuirksFix() {
+  createArrow() {
+    const { ie6Arrow, isIE6, createArrow } = this;
+    const arrow = isIE6 ? ie6Arrow() : createArrow();
+    this.arrow = arrow;
+    return arrow;
+  }
+
+  createDefaultArrow() {
+    const { img } = this;
+    const arrow = mxUtils.createImage(img.src);
+    arrow.style.width = img.width + "px";
+    arrow.style.height = img.height + "px";
+    return arrow;
+  }
+
+  ie6Arrow() {
     const { img } = this;
     var arrow: any;
     // Workaround for PNG images in IE6

@@ -30,10 +30,11 @@ export class DropTargetDisabler extends DropBase {
       dragArrow,
       graph,
       dropArrow,
+      shouldDisable,
     } = this;
     const { checkArrow } = dropArrow;
     // Shift means disabled, delayed on cells with children, shows after this.dropTargetDelay, hides after 2500ms
-    if (this.shouldDisable()) {
+    if (shouldDisable) {
       this.currentStyleTarget = state;
       var tmp = graph.model.isEdge(state.cell)
         ? graph.view.getPoint(state)
@@ -57,7 +58,7 @@ export class DropTargetDisabler extends DropBase {
     }
   }
 
-  shouldDisable() {
+  get shouldDisable() {
     const {
       isDropStyleTargetIgnored,
       dropTargetDelay,
