@@ -1,4 +1,5 @@
 import { SourceEdge } from "../../../../..";
+import { testProps } from "./base";
 
 describe("SourceEdge", () => {
   const opts = {};
@@ -9,6 +10,22 @@ describe("SourceEdge", () => {
   });
 
   describe("instance", () => {
-    describe("properties", () => {});
+    describe("properties", () => {
+      describe("graph", () => {
+        it("is set", () => {
+          expect(instance.graph).toBeDefined();
+        });
+      });
+
+      testProps(instance);
+    });
+
+    describe("methods", () => {
+      describe("addTerminalToEdge()", () => {
+        it("is set", () => {
+          expect(() => instance.addTerminalToEdge()).not.toThrow();
+        });
+      });
+    });
   });
 });
