@@ -4,7 +4,7 @@ import { DropTarget } from "../drop-target/DropTarget";
 import { DropCheck } from "../../drop/check/DropCheck";
 import { DragSourceConfig } from "./DragSourceConfig";
 
-const { mxDragSource, mxClient, mxEvent } = mx;
+const { mxEvent } = mx;
 
 export class DragSource {
   editorUi: any;
@@ -57,9 +57,9 @@ export class DragSource {
   /**
    * Creates a drag source for the given element.
    */
-  create(elt, dropHandler, preview, cells, bounds) {
+  create(elt, dropHandler, preview, cells) {
     // Checks if the cells contain any vertices
-    const { ui, graph, sidebar, firstVertex, freeSourceEdge } = this;
+    const { graph, firstVertex, freeSourceEdge } = this;
 
     for (var i = 0; i < cells.length; i++) {
       if (firstVertex == null && graph.model.isVertex(cells[i])) {

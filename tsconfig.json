@@ -41,6 +41,6 @@
   "references": [
     { "path": "packages/mx" },
     { "path": "packages/resources" },
-    { "path": "packages/menus" }
+    { "path": "packages/sidebar" }
   ]
 }
