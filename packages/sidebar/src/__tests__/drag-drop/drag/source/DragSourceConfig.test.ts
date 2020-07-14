@@ -1,10 +1,12 @@
-import { DragSource } from "../../../..";
+import { DragSourceConfig } from "../../../..";
 import { editorUi } from "../../../mocks";
 
 describe("DragSource", () => {
+  const dragSource = {};
+
   let instance;
   beforeEach(() => {
-    instance = new DragSource(editorUi);
+    instance = new DragSourceConfig(editorUi, dragSource);
   });
 
   describe("instance", () => {

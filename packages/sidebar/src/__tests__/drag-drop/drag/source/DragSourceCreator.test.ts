@@ -2,7 +2,12 @@ import { DragSourceCreator } from "../../../..";
 import { editorUi } from "../../../mocks";
 
 describe("DragSourceCreator", () => {
-  const opts = {};
+  const element = document.createElement("div");
+  const dropHandler = () => {};
+  const preview = true;
+  const cells = [{}];
+
+  const opts = { element, dropHandler, preview, cells };
 
   let instance;
   beforeEach(() => {
@@ -49,15 +54,9 @@ describe("DragSourceCreator", () => {
     });
 
     describe("methods", () => {
-      describe("create({ elt, dropHandler, preview, cells })", () => {
+      describe("create()", () => {
         it("no throw", () => {
-          const element = document.createElement("div");
-          const dropHandler = () => {};
-          const preview = true;
-          const cells = [{}];
-          expect(() =>
-            instance.create({ element, dropHandler, preview, cells })
-          ).not.toThrow();
+          expect(() => instance.create()).not.toThrow();
         });
 
         describe("onDrag(graph, evt, target, x, y)", () => {
