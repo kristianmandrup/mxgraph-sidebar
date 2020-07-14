@@ -1,5 +1,5 @@
-import { DragSourceCreator } from "../../..";
-import { editorUi } from "../../mocks";
+import { DragSourceCreator } from "../../../..";
+import { editorUi } from "../../../mocks";
 
 describe("DragSourceCreator", () => {
   const opts = {};

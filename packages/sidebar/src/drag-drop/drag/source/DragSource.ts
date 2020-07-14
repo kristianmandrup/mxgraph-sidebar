@@ -32,10 +32,36 @@ export class DragSource {
   dropTarget: any;
   dropCheck: any;
 
-  constructor(editorUi) {
+  element: any;
+  dropHandler: any;
+  preview: any;
+  cells: any;
+
+  constructor(editorUi, opts: any = {}) {
     this.editorUi = editorUi;
-    this.dropTarget = new DropTarget(editorUi);
-    this.dropCheck = new DropCheck(editorUi);
+    this.set(opts);
+    this.init();
+  }
+
+  set({ element, dropHandler, preview, cells }) {
+    this.element = element;
+    this.dropHandler = dropHandler;
+    this.preview = preview;
+    this.cells = cells;
+  }
+
+  init() {
+    const { createDropTarget, createDropCheck } = this;
+    this.dropTarget = createDropTarget();
+    this.dropCheck = createDropCheck();
+  }
+
+  createDropTarget() {
+    return new DropTarget(this.editorUi);
+  }
+
+  createDropCheck() {
+    return new DropCheck(this.editorUi);
   }
 
   isDropStyleEnabled(cells, firstVertex) {
@@ -50,51 +76,75 @@ export class DragSource {
     return this.ui.editor.graph;
   }
 
-  get sidebar() {
-    return this;
-  }
-
   /**
    * Creates a drag source for the given element.
    */
-  create(elt, dropHandler, preview, cells) {
+  create() {
     // Checks if the cells contain any vertices
-    const { graph, firstVertex, freeSourceEdge } = this;
+    const { processCells, cells } = this;
 
-    for (var i = 0; i < cells.length; i++) {
-      if (firstVertex == null && graph.model.isVertex(cells[i])) {
-        this.firstVertex = i;
-      } else if (
-        freeSourceEdge == null &&
-        graph.model.isEdge(cells[i]) &&
-        graph.model.getTerminal(cells[i], true) == null
-      ) {
-        this.freeSourceEdge = i;
-      }
+    processCells();
 
-      if (firstVertex != null && freeSourceEdge != null) {
+    const dragSource = this.createDragSourceCreator();
+    this.dropStyleEnabled = this.isDropStyleEnabled(cells, this.firstVertex);
+
+    this.setCancelHandler(dragSource);
+    this.configureDragSource(dragSource);
+
+    return dragSource;
+  }
+
+  processCells() {
+    // Checks if the cells contain any vertices
+    const { processCell, cells } = this;
+
+    for (let index = 0; index < cells.length; index++) {
+      const cell = cells[index];
+      processCell(cell, index);
+
+      if (this.firstVertex && this.freeSourceEdge) {
         break;
       }
     }
+  }
 
-    const dragSource = new DragSourceCreator(this.editorUi).create({
-      elt,
-      dropHandler,
-      preview,
-      cells,
-    });
-
-    this.dropStyleEnabled = this.isDropStyleEnabled(cells, firstVertex);
-
+  setCancelHandler(dragSource) {
     // Stops dragging if cancel is pressed
-    graph.addListener(mxEvent.ESCAPE, (_sender, _evt) => {
+    this.graph.addListener(mxEvent.ESCAPE, (_sender, _evt) => {
       if (dragSource.isActive()) {
         dragSource.reset();
       }
     });
+  }
 
-    new DragSourceConfig(this.graph, dragSource).configure();
+  createDragSourceCreator() {
+    const { element, dropHandler, preview, cells } = this;
+    return new DragSourceCreator(this.editorUi).create({
+      element,
+      dropHandler,
+      preview,
+      cells,
+    });
+  }
 
-    return dragSource;
+  processCell(cell, index) {
+    const { graph, firstVertex, freeSourceEdge } = this;
+    if (firstVertex == null && graph.model.isVertex(cell)) {
+      this.firstVertex = index;
+    } else if (
+      freeSourceEdge == null &&
+      graph.model.isEdge(cell) &&
+      graph.model.getTerminal(cell, true) == null
+    ) {
+      this.freeSourceEdge = index;
+    }
+  }
+
+  configureDragSource(dragSource) {
+    this.createDragSourceConfig(dragSource).configure();
+  }
+
+  createDragSourceConfig(dragSource) {
+    return new DragSourceConfig(this.graph, dragSource);
   }
 }

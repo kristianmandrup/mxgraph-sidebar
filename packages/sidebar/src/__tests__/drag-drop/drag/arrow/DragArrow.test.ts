@@ -1,4 +1,4 @@
-import { DragArrow } from "../../..";
+import { DragArrow } from "../../../..";
 
 describe("DragArrow", () => {
   const refreshTarget = document.createElement("div");
