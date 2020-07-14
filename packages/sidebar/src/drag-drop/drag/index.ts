@@ -1,4 +1,3 @@
 export * from "./arrow";
-export * from "./DragSource";
-export * from "./DragSourceCreator";
+export * from "./source";
 export * from "./drop-target";

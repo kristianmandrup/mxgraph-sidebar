@@ -1,98 +1,49 @@
 import mx from "@mxgraph-app/mx";
-import { DragSourceCreator } from "./DragSourceCreator";
-import { DragArrow } from "./arrow/DragArrow";
-import { DropTarget } from "./drop-target/DropTarget";
-import { DropCheck } from "../drop/check/DropCheck";
-
+import { DragArrow } from "../arrow";
 const { mxDragSource, mxClient, mxEvent } = mx;
 
-export class DragSource {
-  editorUi: any;
-  updateThread: any;
-  dropStyleEnabled: any;
-  triangleUp: any;
-  triangleDown: any;
-  triangleLeft: any;
-  triangleRight: any;
-  updateShapes: any;
-  refreshTarget: any;
-  dropAndConnect: any;
-  previewElement: any;
-  previewElementWidth: any;
-  previewElementHeight: any;
-  currentGuide: any;
-  getDropAndConnectGeometry: any;
-  dropTargetDelay: any;
-  isDropStyleTargetIgnored: any;
-  roundDrop: any;
-  freeSourceEdge: any;
-  firstVertex: any;
+export class DragSourceConfig {
+  ui: any;
+  sidebar: any;
+
+  dragSource: any;
+  dropTarget: any;
 
   dragArrow: any;
-  dropTarget: any;
-  dropCheck: any;
+  activeArrow: any;
 
-  constructor(editorUi) {
-    this.editorUi = editorUi;
-    this.dropTarget = new DropTarget(editorUi);
-    this.dropCheck = new DropCheck(editorUi);
-  }
+  currentTargetState: any;
+  currentStateHandle: any;
+  currentStyleTarget: any;
+  styleTarget: any;
 
-  isDropStyleEnabled(cells, firstVertex) {
-    return this.dropCheck.isDropStyleEnabled(cells, firstVertex);
-  }
+  freeSourceEdge: any;
+  firstVertex: any;
+  cells: any;
+  direction: any;
+  bounds: any;
 
-  get ui() {
-    return this.editorUi;
+  constructor(ui, dragSource) {
+    this.ui = ui;
+    this.dragSource = dragSource;
+    this.init();
   }
 
   get graph() {
-    return this.ui.editor.graph;
+    return this.ui.graph;
   }
 
-  get sidebar() {
-    return this;
+  init() {
+    this.dragArrow = new DragArrow();
   }
 
-  /**
-   * Creates a drag source for the given element.
-   */
-  create(elt, dropHandler, preview, cells, bounds) {
-    // Checks if the cells contain any vertices
-    const { ui, graph, sidebar, firstVertex, freeSourceEdge } = this;
+  configure() {
+    const { mouseDown } = this;
+    mouseDown();
+  }
 
-    for (var i = 0; i < cells.length; i++) {
-      if (firstVertex == null && graph.model.isVertex(cells[i])) {
-        this.firstVertex = i;
-      } else if (
-        freeSourceEdge == null &&
-        graph.model.isEdge(cells[i]) &&
-        graph.model.getTerminal(cells[i], true) == null
-      ) {
-        this.freeSourceEdge = i;
-      }
-
-      if (firstVertex != null && freeSourceEdge != null) {
-        break;
-      }
-    }
-
-    const dragSource = new DragSourceCreator(this.editorUi).create({
-      elt,
-      dropHandler,
-      preview,
-      cells,
-    });
-
-    this.dropStyleEnabled = this.isDropStyleEnabled(cells, firstVertex);
-
-    // Stops dragging if cancel is pressed
-    graph.addListener(mxEvent.ESCAPE, (_sender, _evt) => {
-      if (dragSource.isActive()) {
-        dragSource.reset();
-      }
-    });
-
+  mouseDown() {
+    const { graph, dragSource } = this;
     // Overrides mouseDown to ignore popup triggers
     var mouseDown = dragSource.mouseDown;
 
@@ -102,29 +53,14 @@ export class DragSource {
         mouseDown.apply(this, arguments);
       }
     }; // Workaround for event redirection via image tag in quirks and IE8
+  }
 
-    var currentTargetState: any;
-    var currentStateHandle: any;
-    var currentStyleTarget: any;
-
-    const dragArrow = new DragArrow();
-    this.dragArrow = dragArrow;
-    const {
-      arrowUp,
-      arrowRight,
-      arrowLeft,
-      arrowDown,
-      activeArrow,
-      styleTarget,
-      direction,
-      roundSource,
-      roundTarget,
-    } = dragArrow;
-
+  createPreviewElement() {
+    const { dragSource } = this;
     var dsCreatePreviewElement = dragSource.createPreviewElement;
 
     // Stores initial size of preview element
-    dragSource.createPreviewElement = (_graph) => {
+    dragSource.createPreviewElement = function (_graph) {
       var elt = dsCreatePreviewElement.apply(this, arguments);
 
       // Pass-through events required to tooltip on replace shape
@@ -137,7 +73,10 @@ export class DragSource {
 
       return elt;
     }; // Shows/hides hover icons
+  }
 
+  dragEnter() {
+    const { dragSource, ui } = this;
     var dragEnter = dragSource.dragEnter;
     dragSource.dragEnter = (_graph, _evt) => {
       if (ui.hoverIcons != null) {
@@ -146,7 +85,10 @@ export class DragSource {
 
       dragEnter.apply(this, arguments);
     };
+  }
 
+  dragExit() {
+    const { dragSource, ui } = this;
     var dragExit = dragSource.dragExit;
     dragSource.dragExit = (_graph, _evt) => {
       if (ui.hoverIcons != null) {
@@ -155,8 +97,15 @@ export class DragSource {
 
       dragExit.apply(this, arguments);
     };
+  }
 
-    dragSource.dragOver = (graph, evt) => {
+  dragOver() {
+    const { dragSource, activeArrow } = this;
+    const { currentStyleTarget, styleTarget, currentTargetState } = this;
+    const { freeSourceEdge, sidebar, firstVertex } = this;
+    const { cells, direction, bounds } = this;
+
+    dragSource.dragOver = function (graph, evt) {
       mxDragSource.prototype.dragOver.apply(this, [graph, evt]);
 
       if (this.currentGuide != null && activeArrow != null) {
@@ -252,10 +201,27 @@ export class DragSource {
         }
       }
     };
+  }
 
+  getDropTarget() {
+    const { dragSource, dropTarget } = this;
     dragSource.getDropTarget = (graph, x, y, evt) => {
-      this.dropTarget.getDropTarget(graph, x, y, evt);
+      dropTarget.getDropTarget(graph, x, y, evt);
     };
+  }
+
+  stopDrag() {
+    const { dragSource, dragArrow } = this;
+    const { currentTargetState, currentStateHandle } = this;
+    const {
+      arrowUp,
+      arrowRight,
+      arrowLeft,
+      arrowDown,
+      styleTarget,
+      roundSource,
+      roundTarget,
+    } = dragArrow;
 
     dragSource.stopDrag = () => {
       mxDragSource.prototype.stopDrag.apply(this, []);
@@ -280,13 +246,12 @@ export class DragSource {
         currentStateHandle.reset();
       }
 
-      currentStateHandle = null;
-      currentTargetState = null;
-      currentStyleTarget = null;
+      this.currentStateHandle = null;
+      this.currentTargetState = null;
+      this.currentStyleTarget = null;
+
       dragArrow.styleTargetParent = null;
       dragArrow.activeArrow = null;
     };
-
-    return dragSource;
   }
 }

@@ -3,8 +3,6 @@ import { DropConnectGeo } from "./geo/DropConnectGeo";
 
 export class DropConnector {
   editorUi: any;
-  dropConnect: any;
-  dropConnectGeo: any;
 
   constructor(editorUi) {
     this.editorUi = editorUi;
@@ -22,9 +20,13 @@ export class DropConnector {
    * Creates a drag source for the given element.
    */
   dropAndConnect(source, targets, direction, dropCellIndex, evt) {
-    this.dropConnect
-      .createDropConnect({ source, targets, direction, dropCellIndex, evt })
-      .connect();
+    this.createDropConnect({
+      source,
+      targets,
+      direction,
+      dropCellIndex,
+      evt,
+    }).connect();
   }
 
   /**
