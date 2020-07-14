@@ -6,34 +6,36 @@ export class DropConnector {
   dropConnect: any;
   dropConnectGeo: any;
 
-  constructor(editorUi, { dropConnect, dropConnectGeo }: any = {}) {
+  constructor(editorUi) {
     this.editorUi = editorUi;
-    this.dropConnect = dropConnect || new DropConnect(editorUi);
-    this.dropConnectGeo = dropConnectGeo || new DropConnectGeo(editorUi);
+  }
+
+  createDropConnect(opts: any) {
+    return new DropConnect(this.editorUi, opts);
+  }
+
+  createDropConnectGeo(opts: any) {
+    return new DropConnectGeo(this.editorUi, opts);
   }
 
   /**
    * Creates a drag source for the given element.
    */
   dropAndConnect(source, targets, direction, dropCellIndex, evt) {
-    this.dropConnect.dropAndConnect(
-      source,
-      targets,
-      direction,
-      dropCellIndex,
-      evt
-    );
+    this.dropConnect
+      .createDropConnect({ source, targets, direction, dropCellIndex, evt })
+      .connect();
   }
 
   /**
    * Creates a drag source for the given element.
    */
   getDropAndConnectGeometry(source, target, direction, targets) {
-    this.dropConnectGeo.getDropAndConnectGeometry(
+    this.createDropConnectGeo({
       source,
       target,
       direction,
-      targets
-    );
+      targets,
+    }).connect();
   }
 }

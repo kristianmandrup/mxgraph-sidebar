@@ -3,20 +3,53 @@ const { mxConstants, mxPoint } = mx;
 
 export class DropConnectGeo {
   editorUi: any;
+  source: any;
+  target: any;
+  direction: any;
+  targets: any;
 
-  constructor(editorUi) {
+  constructor(editorUi, opts: any = {}) {
     this.editorUi = editorUi;
+    this.set(opts);
   }
 
-  getDropAndConnectGeometry(source, target, direction, targets) {
-    var graph = this.editorUi.editor.graph;
-    var view = graph.view;
-    var keepSize = targets.length > 1;
-    var geo = graph.getCellGeometry(source);
-    var geo2 = graph.getCellGeometry(target);
+  set({ source, target, direction, targets }: any = {}) {
+    this.source = source;
+    this.target = target;
+    this.direction = direction;
+    this.targets = targets;
+    return this;
+  }
 
-    if (geo != null && geo2 != null) {
-      geo2 = geo2.clone();
+  get graph() {
+    return this.editorUi.editor.graph;
+  }
+
+  get view() {
+    return this.graph.view;
+  }
+
+  get geo() {
+    const { graph, source } = this;
+    return graph.getCellGeometry(source);
+  }
+
+  get geo2() {
+    const { graph, target } = this;
+    return graph.getCellGeometry(target);
+  }
+
+  get keepSize() {
+    return this.targets.length > 1;
+  }
+
+  connect() {
+    const { graph, view, keepSize, source, target, direction } = this;
+    let geo2 = this.geo2;
+    let geo = this.geo;
+
+    if (geo && geo2) {
+      geo2 = this.geo2.clone();
 
       if (graph.model.isEdge(source)) {
         var state = graph.view.getState(source);

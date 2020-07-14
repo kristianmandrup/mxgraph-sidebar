@@ -211,7 +211,7 @@ export class DropConnect {
   /**
    * Creates a drag source for the given element.
    */
-  dropAndConnect() {
+  connect() {
     const { graph } = this;
     let { geo } = this;
 

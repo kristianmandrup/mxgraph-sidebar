@@ -22,6 +22,38 @@ describe("DropConnectGeo", () => {
           expect(instance.graph).toBeDefined();
         });
       });
+
+      describe("view", () => {
+        it("is set", () => {
+          expect(instance.view).toBeDefined();
+        });
+      });
+
+      describe("geo", () => {
+        it("is set", () => {
+          expect(instance.geo).toBeDefined();
+        });
+      });
+
+      describe("geo2", () => {
+        it("is set", () => {
+          expect(instance.geo2).toBeDefined();
+        });
+      });
+
+      describe("keepSize", () => {
+        it("is set", () => {
+          expect(instance.keepSize).toBeDefined();
+        });
+      });
+    });
+
+    describe("methods", () => {
+      describe("connect()", () => {
+        it("no throw", () => {
+          expect(() => instance.connect()).not.toThrow();
+        });
+      });
     });
   });
 });
