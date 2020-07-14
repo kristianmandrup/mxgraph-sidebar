@@ -116,7 +116,11 @@ export class DragSourceConfig {
 
   dragOver() {
     const { dragSource } = this;
-    dragSource.dragOver = new DragOver(this).dragOver;
+    dragSource.dragOver = this.createDragOver().dragOver;
+  }
+
+  createDragOver() {
+    return new DragOver(this);
   }
 
   getDropTarget() {
