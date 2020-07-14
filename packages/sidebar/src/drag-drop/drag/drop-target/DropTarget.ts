@@ -24,6 +24,10 @@ export class DropTarget extends DropBase {
     this.dropArrows = new DropArrows(editorUi);
   }
 
+  get model() {
+    return this.graph.getModel();
+  }
+
   // Allows drop into cell only if target is a valid root
   getDropTarget = (graph, x, y, evt) => {
     const {
@@ -44,7 +48,7 @@ export class DropTarget extends DropBase {
     var state = graph.view.getState(cell);
     var activeArrow: any;
     var startTime = new Date().getTime();
-    var timeOnTarget = 0;
+    let timeOnTarget = 0;
     var prev = null;
 
     // Time on target
@@ -117,10 +121,6 @@ export class DropTarget extends DropBase {
       return null;
     }
     return target;
-  }
-
-  get model() {
-    return this.graph.getModel();
   }
 
   shouldIgnoreTarget(target, evt) {
