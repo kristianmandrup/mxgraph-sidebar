@@ -4,7 +4,7 @@ const { mxUtils } = mx;
 export class DragSourceCreator {
   editorUi: any;
   updateThread: any;
-  elt: any;
+  element: any;
   dropHandler: any;
   preview: any;
   cells: any;
@@ -21,9 +21,9 @@ export class DragSourceCreator {
   direction: any;
 
   constructor(editorUi, opts: any = {}) {
-    const { elt, dropHandler, preview, cells } = opts;
+    const { element, dropHandler, preview, cells } = opts;
     this.editorUi = editorUi;
-    this.elt = elt;
+    this.element = element;
     this.dropHandler = dropHandler;
     this.preview = preview;
     this.cells = cells;
@@ -37,14 +37,30 @@ export class DragSourceCreator {
     return this.ui.editor.graph;
   }
 
-  create({ elt, dropHandler, preview, cells }: any = {}) {
-    elt = elt || this.elt;
+  create({ element, dropHandler, preview, cells }: any = {}) {
+    element = element || this.element;
     dropHandler = dropHandler || this.dropHandler;
     preview = preview || this.preview;
     cells = cells || this.cells;
 
-    const {
+    const { graph, onDrag } = this;
+
+    return mxUtils.makeDraggable(
+      element,
       graph,
+      onDrag,
+      preview,
+      0,
+      0,
+      graph.autoscroll,
+      true,
+      true
+    );
+  }
+
+  onDrag = (graph, evt, _target, _x, _y) => {
+    const {
+      cells,
       updateThread,
       currentStyleTarget,
       styleTarget,
@@ -55,67 +71,48 @@ export class DragSourceCreator {
       freeSourceEdge,
       dropAndConnect,
       direction,
+      dropHandler,
     } = this;
+    if (updateThread != null) {
+      window.clearTimeout(updateThread);
+    }
 
-    return mxUtils.makeDraggable(
-      elt,
-      graph,
-      (graph, evt, _target, _x, _y) => {
-        if (updateThread != null) {
-          window.clearTimeout(updateThread);
-        }
+    if (
+      cells != null &&
+      currentStyleTarget != null &&
+      activeArrow == styleTarget
+    ) {
+      var tmp = graph.isCellSelected(currentStyleTarget.cell)
+        ? graph.getSelectionCells()
+        : [currentStyleTarget.cell];
+      var updatedCells = updateShapes(
+        graph.model.isEdge(currentStyleTarget.cell)
+          ? cells[0]
+          : cells[firstVertex],
+        tmp
+      );
+      graph.setSelectionCells(updatedCells);
+    } else if (
+      cells != null &&
+      activeArrow != null &&
+      currentTargetState != null &&
+      activeArrow != styleTarget
+    ) {
+      var index =
+        graph.model.isEdge(currentTargetState.cell) || freeSourceEdge == null
+          ? firstVertex
+          : freeSourceEdge;
+      graph.setSelectionCells(
+        dropAndConnect(currentTargetState.cell, cells, direction, index, evt)
+      );
+    } else {
+      dropHandler.apply(this, [graph, evt, _target, _x, _y]);
+    }
 
-        if (
-          cells != null &&
-          currentStyleTarget != null &&
-          activeArrow == styleTarget
-        ) {
-          var tmp = graph.isCellSelected(currentStyleTarget.cell)
-            ? graph.getSelectionCells()
-            : [currentStyleTarget.cell];
-          var updatedCells = updateShapes(
-            graph.model.isEdge(currentStyleTarget.cell)
-              ? cells[0]
-              : cells[firstVertex],
-            tmp
-          );
-          graph.setSelectionCells(updatedCells);
-        } else if (
-          cells != null &&
-          activeArrow != null &&
-          currentTargetState != null &&
-          activeArrow != styleTarget
-        ) {
-          var index =
-            graph.model.isEdge(currentTargetState.cell) ||
-            freeSourceEdge == null
-              ? firstVertex
-              : freeSourceEdge;
-          graph.setSelectionCells(
-            dropAndConnect(
-              currentTargetState.cell,
-              cells,
-              direction,
-              index,
-              evt
-            )
-          );
-        } else {
-          dropHandler.apply(this, arguments);
-        }
-
-        if (this.editorUi.hoverIcons != null) {
-          this.editorUi.hoverIcons.update(
-            graph.view.getState(graph.getSelectionCell())
-          );
-        }
-      },
-      preview,
-      0,
-      0,
-      graph.autoscroll,
-      true,
-      true
-    );
-  }
+    if (this.editorUi.hoverIcons != null) {
+      this.editorUi.hoverIcons.update(
+        graph.view.getState(graph.getSelectionCell())
+      );
+    }
+  };
 }
