@@ -30,90 +30,6 @@ export class InsideBounds extends DropBase {
     );
   }
 
-  checkBounds() {
-    const { currentTargetState, graph, dropArrow, x, y, bbox, bds } = this;
-    const {
-      checkArrow,
-      roundSource,
-      roundDrop,
-      roundTarget,
-      arrowSpacing,
-    } = dropArrow;
-
-    // Checks if inside bounds
-    if (!this.isInsideBounds) return;
-    // LATER: Use hit-detection for edges
-    if (graph.model.isEdge(currentTargetState.cell)) {
-      var pts = currentTargetState.absolutePoints;
-
-      if (roundSource.parentNode != null) {
-        var p0 = pts[0];
-        bbox.add(
-          checkArrow(
-            x,
-            y,
-            new mxRectangle(
-              p0.x - roundDrop.width / 2,
-              p0.y - roundDrop.height / 2,
-              roundDrop.width,
-              roundDrop.height
-            ),
-            roundSource
-          )
-        );
-      }
-
-      if (roundTarget.parentNode != null) {
-        var pe = pts[pts.length - 1];
-        bbox.add(
-          checkArrow(
-            x,
-            y,
-            new mxRectangle(
-              pe.x - roundDrop.width / 2,
-              pe.y - roundDrop.height / 2,
-              roundDrop.width,
-              roundDrop.height
-            ),
-            roundTarget
-          )
-        );
-      }
-    } else {
-      bds.grow(graph.tolerance);
-      bds.grow(arrowSpacing);
-
-      var handler = this.graph.selectionCellsHandler.getHandler(
-        currentTargetState.cell
-      );
-
-      if (handler != null) {
-        bds.x -= handler.horizontalOffset / 2;
-        bds.y -= handler.verticalOffset / 2;
-        bds.width += handler.horizontalOffset;
-        bds.height += handler.verticalOffset;
-
-        // Adds bounding box of rotation handle to avoid overlap
-        if (
-          handler.rotationShape != null &&
-          handler.rotationShape.node != null &&
-          handler.rotationShape.node.style.visibility != "hidden" &&
-          handler.rotationShape.node.style.display != "none" &&
-          handler.rotationShape.boundingBox != null
-        ) {
-          bds.add(handler.rotationShape.boundingBox);
-        }
-      }
-
-      this.addBoxes();
-    }
-
-    // Adds tolerance
-    if (bbox != null) {
-      bbox.grow(10);
-    }
-  }
-
   get bbox() {
     this._bbox =
       this._bbox || mxRectangle.fromRectangle(this.currentTargetState);
@@ -123,6 +39,104 @@ export class InsideBounds extends DropBase {
   get bds() {
     this._bds = this._bds || this.createBds();
     return this._bds;
+  }
+
+  get isEdgeCell() {
+    const { currentTargetState, graph } = this;
+    return graph.model.isEdge(currentTargetState.cell);
+  }
+
+  checkBounds() {
+    const { isEdgeCell, processEdgeCell, processCell, postProcess } = this;
+    // Checks if inside bounds
+    if (!this.isInsideBounds) return;
+    // LATER: Use hit-detection for edges
+    isEdgeCell ? processEdgeCell() : processCell();
+    postProcess();
+  }
+
+  postProcess() {
+    this.addBoxTolerance();
+  }
+
+  addBoxTolerance() {
+    const { bbox } = this;
+    // Adds tolerance
+    if (bbox != null) {
+      bbox.grow(10);
+    }
+  }
+
+  processCell() {
+    const { currentTargetState, graph, dropArrow, bds } = this;
+    const { arrowSpacing } = dropArrow;
+    bds.grow(graph.tolerance);
+    bds.grow(arrowSpacing);
+
+    var handler = this.graph.selectionCellsHandler.getHandler(
+      currentTargetState.cell
+    );
+
+    if (handler != null) {
+      bds.x -= handler.horizontalOffset / 2;
+      bds.y -= handler.verticalOffset / 2;
+      bds.width += handler.horizontalOffset;
+      bds.height += handler.verticalOffset;
+
+      // Adds bounding box of rotation handle to avoid overlap
+      if (
+        handler.rotationShape != null &&
+        handler.rotationShape.node != null &&
+        handler.rotationShape.node.style.visibility != "hidden" &&
+        handler.rotationShape.node.style.display != "none" &&
+        handler.rotationShape.boundingBox != null
+      ) {
+        bds.add(handler.rotationShape.boundingBox);
+      }
+    }
+
+    this.addBoxDirections();
+  }
+
+  processEdgeCell() {
+    const { currentTargetState, dropArrow, x, y, bbox } = this;
+    const { checkArrow, roundSource, roundDrop, roundTarget } = dropArrow;
+
+    var pts = currentTargetState.absolutePoints;
+
+    if (roundSource.parentNode != null) {
+      var p0 = pts[0];
+      bbox.add(
+        checkArrow(
+          x,
+          y,
+          new mxRectangle(
+            p0.x - roundDrop.width / 2,
+            p0.y - roundDrop.height / 2,
+            roundDrop.width,
+            roundDrop.height
+          ),
+          roundSource
+        )
+      );
+    }
+
+    if (roundTarget.parentNode != null) {
+      var pe = pts[pts.length - 1];
+      bbox.add(
+        checkArrow(
+          x,
+          y,
+          new mxRectangle(
+            pe.x - roundDrop.width / 2,
+            pe.y - roundDrop.height / 2,
+            roundDrop.width,
+            roundDrop.height
+          ),
+          roundTarget
+        )
+      );
+    }
   }
 
   createBds() {
@@ -139,7 +153,7 @@ export class InsideBounds extends DropBase {
     return bds;
   }
 
-  addBoxes() {
+  addBoxDirections() {
     this.bboxDown();
     this.bboxLeft();
     this.bboxRight();
