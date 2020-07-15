@@ -1,7 +1,7 @@
-import { InsideBoundsConfig } from "../../../..";
-import { editorUi } from "../../../mocks";
+import { InsideBoundsConfig } from "../../../../..";
+import { editorUi } from "../../../../mocks";
 
-describe("InsideBounds", () => {
+describe("InsideBoundsConfig", () => {
   const dropArrow = {};
   const opts = {
     dropArrow,

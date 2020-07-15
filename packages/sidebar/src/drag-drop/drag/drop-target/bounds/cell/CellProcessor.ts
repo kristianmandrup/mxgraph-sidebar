@@ -9,6 +9,11 @@ export class CellProcessor extends BaseCellProcessor {
     this.boxDirections = new BoxDirections(this);
   }
 
+  get handler() {
+    const { graph, currentTargetState } = this.config;
+    return graph.selectionCellsHandler.getHandler(currentTargetState.cell);
+  }
+
   addBoxDirections() {
     this.boxDirections.addBoxDirections();
   }
@@ -25,11 +30,6 @@ export class CellProcessor extends BaseCellProcessor {
     const { arrowSpacing } = dropArrow;
     bds.grow(graph.tolerance);
     bds.grow(arrowSpacing);
-  }
-
-  get handler() {
-    const { graph, currentTargetState } = this.config;
-    return graph.selectionCellsHandler.getHandler(currentTargetState.cell);
   }
 
   configureHandler() {

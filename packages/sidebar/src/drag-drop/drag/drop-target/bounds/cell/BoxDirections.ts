@@ -10,9 +10,9 @@ export class BoxDirections {
 
   addBoxDirections() {
     this.bboxDown();
+    this.bboxUp();
     this.bboxLeft();
     this.bboxRight();
-    this.bboxUp();
   }
 
   bboxUp() {
