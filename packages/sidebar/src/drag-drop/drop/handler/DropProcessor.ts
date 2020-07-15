@@ -16,7 +16,17 @@ export class DropProcessor {
 
   constructor(
     editorUi,
-    { allowSplit, allowCellsInserted, bounds, graph, cells, target, evt, x, y }
+    {
+      allowSplit,
+      allowCellsInserted,
+      bounds,
+      graph,
+      cells,
+      target,
+      evt,
+      x,
+      y,
+    }: any = {}
   ) {
     this.editorUi = editorUi;
     this.allowSplit = allowSplit;
@@ -28,6 +38,13 @@ export class DropProcessor {
     this.evt = evt;
     this.x = x;
     this.y = y;
+  }
+
+  get validDropTarget() {
+    const { target, evt, cells, graph } = this;
+    return target != null && !mxEvent.isAltDown(evt)
+      ? graph.isValidDropTarget(target, cells, evt)
+      : false;
   }
 
   process() {
@@ -58,12 +75,5 @@ export class DropProcessor {
     // Holding alt while mouse is released ignores drop target
     if (target && !validDropTarget) return null;
     return target;
-  }
-
-  get validDropTarget() {
-    const { target, evt, cells, graph } = this;
-    return target != null && !mxEvent.isAltDown(evt)
-      ? graph.isValidDropTarget(target, cells, evt)
-      : false;
   }
 }

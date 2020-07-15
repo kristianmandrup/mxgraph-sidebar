@@ -11,7 +11,7 @@ export class DropHandler {
   bounds: any;
 
   constructor(sidebar, { cells, allowSplit, allowCellsInserted, bounds }) {
-    this.container = sidebar.containter;
+    this.container = sidebar.container;
     this.editorUi = sidebar.editorUi;
     this.cells = cells;
     this.allowSplit = allowSplit;

@@ -53,6 +53,22 @@ export class DropTargetProcessor {
     return this.target || this.graph.getDefaultParent();
   }
 
+  get shouldEditSelectedElement() {
+    const { graph, evt, select } = this;
+    return (
+      graph.editAfterInsert &&
+      evt != null &&
+      mxEvent.isMouseEvent(evt) &&
+      select &&
+      select.length == 1
+    );
+  }
+
+  get hasSelectedElements() {
+    const { select } = this;
+    return select && select.length > 0;
+  }
+
   shouldSplitTarget(target, cells) {
     const { allowSplit, graph, evt } = this;
     return allowSplit && graph.isSplitTarget(target, cells, evt);
@@ -145,27 +161,11 @@ export class DropTargetProcessor {
     postProcess();
   }
 
-  get shouldEditSelectedElement() {
-    const { graph, evt, select } = this;
-    return (
-      graph.editAfterInsert &&
-      evt != null &&
-      mxEvent.isMouseEvent(evt) &&
-      select &&
-      select.length == 1
-    );
-  }
-
   editSelected() {
     const { graph, select } = this;
     window.setTimeout(function () {
       graph.startEditing(select[0]);
     }, 0);
-  }
-
-  get hasSelectedElements() {
-    const { select } = this;
-    return select && select.length > 0;
   }
 
   selectAndDisplaySelectedCells() {
