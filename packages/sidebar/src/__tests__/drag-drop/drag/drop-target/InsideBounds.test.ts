@@ -1,4 +1,4 @@
-import { InsideBounds } from "../../../..";
+import { InsideBoundsConfig } from "../../../..";
 import { editorUi } from "../../../mocks";
 
 describe("InsideBounds", () => {
@@ -8,7 +8,7 @@ describe("InsideBounds", () => {
   };
   let instance;
   beforeEach(() => {
-    instance = new InsideBounds(editorUi, opts);
+    instance = new InsideBoundsConfig(editorUi, opts);
   });
 
   describe("instance", () => {
